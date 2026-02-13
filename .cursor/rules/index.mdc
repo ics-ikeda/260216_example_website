@@ -1,0 +1,44 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+- 作業を開始するときは、`npm run dev`コマンドを使い、viteを起動すること
+- `@Browser`や`playwright-mcp`はCursorにセットアップ済です。MCPにつないでブラウザのコンソールや描画結果を参考に開発を進めてください。
+    - DevToolsのコンソールエラーやワーニングは必ず解消ください。
+- 修正作業をしたら、`npm run format`コマンドを実行すること。
+  - エラーが発生したら、すべて修正すること。
+- コードは短くすることを優先してください。
+
+# HTML
+- alt属性は原則空で記載ください。誤った文字列が入るよりマシです。
+- lang="ja"にしなさい
+- 
+
+# TypeScript
+
+- anyは利用禁止
+- 原則const。letは可能な限り避けること。
+- ES2025
+- 最新Chromeだけで動けばいい。古いブラウザ向けのフォールバックや分岐は不要
+
+# CSS
+
+- font-weightはnormalかbold
+- font-familyは原則sans-serif。system-ui等は絶対ダメ。
+- CSS Nesting必須
+- `rgba()`禁止。カンマなしの`rgb()`記法で。
+- 指定して意味の無いCSSは書かないこと
+- AIらしい紫グラデーションは禁止
+- 指示がない限りダークモード・ライトモードの実装はするな
+- 余白は2px, 4px, 8px, 16px, 32px, 64pxなど2の倍数を使うこと
+- フォントサイズは原則remで。
+- transformは使わず、translateやscaleプロパティーを優先すること
+- `@supports()`のフォールバックは不要
+- メディアクエリは`min-width: 〇〇px`の古い記法は禁止
+
+# package.json
+
+- モジュールは最新版のみを使うこと
+
