@@ -2,7 +2,11 @@
   width: min(100%, var(--container-max));
   margin-inline: auto;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: visible;
+
+  @media (max-width: 768px) {
+    overflow-x: hidden;
+  }
 }
 
 .section {
@@ -22,7 +26,12 @@
 
 .section--hero {
   padding: 0;
-  height: 848px;
+  height: 620px;
+
+  @media (min-width: 769px) {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
 
   @media (max-width: 768px) {
     height: 842px;

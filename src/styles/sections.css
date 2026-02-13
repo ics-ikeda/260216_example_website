@@ -17,14 +17,14 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  --frame-mask-size: 1280px 620px;
-  --frame-mask-position: 0px 123px;
+  --frame-mask-size: 100% 620px;
+  --frame-mask-position: 0 0;
   --frame-mask-repeat: no-repeat;
   --frame-mask-image: url("/assets/masks/hero-mask-desktop.svg");
 
   @media (max-width: 768px) {
-    --frame-mask-size: 360px 842px;
-    --frame-mask-position: 696px 80px;
+    --frame-mask-size: 100% 842px;
+    --frame-mask-position: 0 0;
     --frame-mask-image: url("/assets/masks/hero-mask-mobile.svg");
   }
 }
