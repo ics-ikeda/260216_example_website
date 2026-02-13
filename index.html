@@ -52,7 +52,7 @@
             <source media="(max-width: 768px)" srcset="/assets/images/hero-photo.png" />
             <img
               src="/assets/images/hero-photo.png"
-              alt=""
+              alt="夜景のメインビジュアル"
               class="hero__image media-frame__image"
             />
           </picture>
@@ -87,7 +87,12 @@
         <div id="concept-media" class="media-frame concept__media">
           <picture>
             <source media="(max-width: 768px)" srcset="/assets/images/concept-photo-mobile.png" />
-            <img src="/assets/images/concept-photo-desktop.png" alt="" class="media-frame__image" />
+            <img
+              src="/assets/images/concept-photo-desktop.png"
+              alt="コンセプトを表現した夜景写真"
+              loading="lazy"
+              class="media-frame__image"
+            />
           </picture>
         </div>
       </section>
@@ -114,33 +119,78 @@
           私たちの作品は、それぞれが一つの物語を持つ夜の風景を切り取ります。<br />都市の煌めきと自然の静寂が絶妙に交錯し、<br />一瞬の光景を永遠に記録し、見る者の心に深い感動を呼び起こします。
         </p>
         <div class="work__gallery">
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-01.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-02.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-03.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-04.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-05.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-06.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-07.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-08.png" alt="" class="media-frame__image" />
-          </div>
-          <div class="work__item media-frame">
-            <img src="/assets/images/work-photo-09.png" alt="" class="media-frame__image" />
-          </div>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-01.png"
+              alt="青い霧に包まれた夜の都市景観"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-02.png"
+              alt="夕暮れの雲の下に広がる都心の夜景"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-03.png"
+              alt="夜空に打ち上がる花火と都市のビル群"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-04.png"
+              alt="水面に反射する湾岸の夜景と東京タワー"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-05.png"
+              alt="ライトアップされた東京タワーと都心の夜景"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-06.png"
+              alt="川面に光跡を描く船と高層ビル群"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-07.png"
+              alt="都市の向こうで上がる大規模な花火"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-08.png"
+              alt="光跡が流れる川と青く照らされた橋"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
+          <button type="button" class="work__item media-frame">
+            <img
+              src="/assets/images/work-photo-09.png"
+              alt="レインボーカラーの東京タワーと高層ビル群"
+              loading="lazy"
+              class="media-frame__image"
+            />
+          </button>
         </div>
         <div class="work__button-area">
           <button type="button" class="site-button site-button--more">
@@ -153,6 +203,34 @@
           </button>
         </div>
       </section>
+
+      <div class="work-lightbox" data-work-lightbox hidden aria-hidden="true">
+        <button
+          type="button"
+          class="work-lightbox__backdrop"
+          title="全画面表示を閉じる"
+          data-work-lightbox-close
+        ></button>
+        <div
+          class="work-lightbox__content"
+          role="dialog"
+          aria-modal="true"
+          title="作品を全画面表示"
+        >
+          <button
+            type="button"
+            class="work-lightbox__nav"
+            data-work-lightbox-previous
+            title="前の写真"
+          >
+            &lt;
+          </button>
+          <img src="" alt="" class="work-lightbox__image" data-work-lightbox-image />
+          <button type="button" class="work-lightbox__nav" data-work-lightbox-next title="次の写真">
+            &gt;
+          </button>
+        </div>
+      </div>
 
       <section id="team" class="section section--team">
         <div class="section-header">
@@ -178,7 +256,12 @@
         <div class="team__cards">
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-01.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-01.png"
+                alt="Iwao Kurosawaのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Iwao Kurosawa</p>
             <p class="team__description">
@@ -187,7 +270,12 @@
           </article>
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-02.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-02.png"
+                alt="Alice Taylorのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Alice Taylor</p>
             <p class="team__description">
@@ -196,7 +284,12 @@
           </article>
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-03.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-03.png"
+                alt="Eiji Makabeのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Eiji Makabe</p>
             <p class="team__description">
@@ -205,7 +298,12 @@
           </article>
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-04.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-04.png"
+                alt="Koyomi Tsukishimaのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Koyomi Tsukishima</p>
             <p class="team__description">
@@ -214,7 +312,12 @@
           </article>
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-05.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-05.png"
+                alt="Ken Yamamotoのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Ken Yamamoto</p>
             <p class="team__description">
@@ -223,7 +326,12 @@
           </article>
           <article class="team__card">
             <div class="team__image-frame media-frame">
-              <img src="/assets/images/team-member-06.png" alt="" class="media-frame__image" />
+              <img
+                src="/assets/images/team-member-06.png"
+                alt="Hikaru Hasegawaのポートレート"
+                loading="lazy"
+                class="media-frame__image"
+              />
             </div>
             <p class="team__name">Hikaru Hasegawa</p>
             <p class="team__description">
@@ -254,7 +362,12 @@
         <p class="section-description section-description--studio">スタジオの情報を紹介します。</p>
         <div class="studio__layout">
           <div id="studio-media" class="studio__image media-frame">
-            <img src="/assets/images/studio-photo.png" alt="" class="media-frame__image" />
+            <img
+              src="/assets/images/studio-photo.png"
+              alt="スタジオ外観写真"
+              loading="lazy"
+              class="media-frame__image"
+            />
           </div>
           <ul class="studio__info-list">
             <li class="studio__info-item">
@@ -295,7 +408,12 @@
         <div id="contact-media" class="contact__media media-frame">
           <picture>
             <source media="(max-width: 768px)" srcset="/assets/images/contact-photo.png" />
-            <img src="/assets/images/contact-photo.png" alt="" class="media-frame__image" />
+            <img
+              src="/assets/images/contact-photo.png"
+              alt="お問い合わせセクションの背景写真"
+              loading="lazy"
+              class="media-frame__image"
+            />
           </picture>
         </div>
         <div class="contact__content">

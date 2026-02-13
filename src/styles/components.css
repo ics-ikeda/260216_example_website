@@ -64,6 +64,12 @@
 
 .section-description--studio {
   margin-bottom: 4px;
+
+  @media (max-width: 767px) {
+    text-align: center;
+    width: min(100%, 312px);
+    margin-inline: auto;
+  }
 }
 
 .media-frame {
