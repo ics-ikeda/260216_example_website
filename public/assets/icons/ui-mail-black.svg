@@ -1,0 +1,8 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(3 6)">
+<path d="M18.5 0.5H0.5V12.87H18.5V0.5Z" stroke="var(--stroke-0, #1E1E1E)" stroke-linejoin="round"/>
+</g>
+<g transform="translate(3 8.2992)">
+<path d="M0.500084 0.500084L8.82008 5.29008C9.25008 5.50008 9.75008 5.50008 10.1801 5.29008L18.5001 0.500084" stroke="var(--stroke-0, #1E1E1E)" stroke-linecap="round"/>
+</g>
+</svg>

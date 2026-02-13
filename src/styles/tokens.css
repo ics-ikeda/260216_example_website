@@ -1,0 +1,9 @@
+:root {
+  --color-bg: white;
+  --color-text: rgb(30 30 30);
+  --color-text-muted: rgb(160 160 160);
+  --color-line: rgb(191 191 191);
+  --section-gap-large: 80px;
+  --section-gap-small: 60px;
+  --container-max: 1280px;
+}
