@@ -1,13 +1,325 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vite-project</title>
+    <link rel="icon" href="data:," />
+    <title>Spectrum Night</title>
   </head>
   <body>
-    <div id="app"></div>
+    <main id="top" class="site">
+      <header class="site-header">
+        <a href="#top" class="site-header__brand">Spectrum Night</a>
+        <input
+          type="checkbox"
+          id="site-header__menu-toggle"
+          class="site-header__menu-toggle"
+          aria-label="サイトメニューを開閉"
+          aria-controls="site-header__nav"
+        />
+        <label for="site-header__menu-toggle" class="site-header__menu" aria-label="メニューを開閉">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <nav id="site-header__nav" class="site-header__nav" aria-label="セクション内リンク">
+          <a href="#concept">コンセプト</a>
+          <a href="#work">作品</a>
+          <a href="#team">チーム</a>
+          <a href="#studio">スタジオ</a>
+          <a href="#contact">コンタクト</a>
+        </nav>
+      </header>
+
+      <section class="hero section section--hero">
+        <div id="hero-media" class="hero__media media-frame">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/assets/images/hero-photo.png" />
+            <img
+              src="/assets/images/hero-photo.png"
+              alt=""
+              class="hero__image media-frame__image"
+            />
+          </picture>
+        </div>
+        <div class="hero__title-area">
+          <p class="hero__subtitle">night view photographer team</p>
+          <h1 class="hero__title">Spectrum Night</h1>
+        </div>
+      </section>
+
+      <section id="concept" class="section section--concept">
+        <div class="section-header">
+          <div class="section-header__label">
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--left"
+            />
+            <p class="section-header__label-text">コンセプト</p>
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--right"
+            />
+          </div>
+          <p class="section-header__subtitle">Concept</p>
+          <div class="section-header__line" aria-hidden="true"></div>
+        </div>
+        <p class="section-description">
+          闇を光で描くアーティスト、私たちは夜景写真家チームのSpectrum Nightです。<br />都市の息吹と星々の光を紡ぎ出す夜景撮影を通じ、<br />見えない美しさを皆さまにお届けします。<br /><br />各地の夜景を巡る旅に、どうぞご一緒に。
+        </p>
+        <div id="concept-media" class="media-frame concept__media">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/assets/images/concept-photo-mobile.png" />
+            <img src="/assets/images/concept-photo-desktop.png" alt="" class="media-frame__image" />
+          </picture>
+        </div>
+      </section>
+
+      <section id="work" class="section section--work">
+        <div class="section-header">
+          <div class="section-header__label">
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--left"
+            />
+            <p class="section-header__label-text">作品</p>
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--right"
+            />
+          </div>
+          <p class="section-header__subtitle">Work</p>
+          <div class="section-header__line" aria-hidden="true"></div>
+        </div>
+        <p class="section-description">
+          私たちの作品は、それぞれが一つの物語を持つ夜の風景を切り取ります。<br />都市の煌めきと自然の静寂が絶妙に交錯し、<br />一瞬の光景を永遠に記録し、見る者の心に深い感動を呼び起こします。
+        </p>
+        <div class="work__gallery">
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-01.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-02.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-03.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-04.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-05.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-06.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-07.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-08.png" alt="" class="media-frame__image" />
+          </div>
+          <div class="work__item media-frame">
+            <img src="/assets/images/work-photo-09.png" alt="" class="media-frame__image" />
+          </div>
+        </div>
+        <div class="work__button-area">
+          <button type="button" class="site-button site-button--more">
+            <span>more works</span>
+            <img
+              src="/assets/icons/ui-button-icon.svg"
+              alt=""
+              class="site-button__icon site-button__icon--arrow"
+            />
+          </button>
+        </div>
+      </section>
+
+      <section id="team" class="section section--team">
+        <div class="section-header">
+          <div class="section-header__label">
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--left"
+            />
+            <p class="section-header__label-text">チーム</p>
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--right"
+            />
+          </div>
+          <p class="section-header__subtitle">Team</p>
+          <div class="section-header__line" aria-hidden="true"></div>
+        </div>
+        <p class="section-description">
+          Spectrum Night専属のフォトグラファーを紹介。<br />得意の分野で夜景写真をキャプチャーします。
+        </p>
+        <div class="team__cards">
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-01.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Iwao Kurosawa</p>
+            <p class="team__description">
+              都市の夜景を華麗に描く夜景写真家。ネオナイトライトビジュアルスクール出身。<br />夜の街の美しさと躍動感を写真に閉じ込め、観る者に特別な刺激を与える。
+            </p>
+          </article>
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-02.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Alice Taylor</p>
+            <p class="team__description">
+              都市風景を捉える写真家。<br />イマジネーションアートスクール卒。<br />作品は詩的な瞬間を写し出すことに定評あり。
+            </p>
+          </article>
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-03.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Eiji Makabe</p>
+            <p class="team__description">
+              都会の人間ドラマを捉えるドキュメンタリー写真家。<br />カルチャーメディアアートアカデミー卒業。<br />作品は、見えない物語を明らかにすることに独特の視点を持つ。
+            </p>
+          </article>
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-04.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Koyomi Tsukishima</p>
+            <p class="team__description">
+              シュールな夢想を描く抽象写真家。<br />現代ビジュアルイメージングスクール出身。<br />写真を通じて夢と現実の境界をあいまいにする手法で、観る者を深く引き込む。
+            </p>
+          </article>
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-05.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Ken Yamamoto</p>
+            <p class="team__description">
+              自然と人間の織りなす瞬間を追求。<br />未来創造ビジュアルアカデミー出身。<br />写真で感動を伝える手法に独自の解釈。
+            </p>
+          </article>
+          <article class="team__card">
+            <div class="team__image-frame media-frame">
+              <img src="/assets/images/team-member-06.png" alt="" class="media-frame__image" />
+            </div>
+            <p class="team__name">Hikaru Hasegawa</p>
+            <p class="team__description">
+              風景と人物を鮮烈に繋げる写真家。<br />国内外のメジャー雑誌に作品掲載、<br />その眼は時間と空間を独特な視線で結びつける。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="studio" class="section section--studio">
+        <div class="section-header">
+          <div class="section-header__label">
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--left"
+            />
+            <p class="section-header__label-text">スタジオ</p>
+            <img
+              src="/assets/icons/ui-arrow-left-black.svg"
+              alt=""
+              class="section-header__icon section-header__icon--right"
+            />
+          </div>
+          <p class="section-header__subtitle">Studio Information</p>
+          <div class="section-header__line" aria-hidden="true"></div>
+        </div>
+        <p class="section-description section-description--studio">スタジオの情報を紹介します。</p>
+        <div class="studio__layout">
+          <div id="studio-media" class="studio__image media-frame">
+            <img src="/assets/images/studio-photo.png" alt="" class="media-frame__image" />
+          </div>
+          <ul class="studio__info-list">
+            <li class="studio__info-item">
+              <div class="studio__info-heading">
+                住所<img
+                  src="/assets/icons/studio-info-divider.svg"
+                  alt=""
+                  class="studio__info-line"
+                />
+              </div>
+              <p class="studio__info-detail">〒106-0031<br />東京都 港区 西麻布0-0-0</p>
+            </li>
+            <li class="studio__info-item">
+              <div class="studio__info-heading">
+                営業時間<img
+                  src="/assets/icons/studio-info-divider.svg"
+                  alt=""
+                  class="studio__info-line"
+                />
+              </div>
+              <p class="studio__info-detail">11:00 - 20:00（定休日：土曜日・日曜日）</p>
+            </li>
+            <li class="studio__info-item">
+              <div class="studio__info-heading">
+                アクセス<img
+                  src="/assets/icons/studio-info-divider.svg"
+                  alt=""
+                  class="studio__info-line"
+                />
+              </div>
+              <p class="studio__info-detail">日比谷線 広尾駅から徒歩15分</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="contact" class="section section--contact">
+        <div id="contact-media" class="contact__media media-frame">
+          <picture>
+            <source media="(max-width: 768px)" srcset="/assets/images/contact-photo.png" />
+            <img src="/assets/images/contact-photo.png" alt="" class="media-frame__image" />
+          </picture>
+        </div>
+        <div class="contact__content">
+          <div class="section-header">
+            <div class="section-header__label">
+              <img
+                src="/assets/icons/ui-arrow-left-white.svg"
+                alt=""
+                class="section-header__icon section-header__icon--light section-header__icon--left"
+              />
+              <p class="section-header__label-text">コンタクト</p>
+              <img
+                src="/assets/icons/ui-arrow-left-white.svg"
+                alt=""
+                class="section-header__icon section-header__icon--light section-header__icon--right"
+              />
+            </div>
+            <p class="section-header__subtitle">Contact us</p>
+            <div class="section-header__line" aria-hidden="true"></div>
+          </div>
+          <p class="contact__message">
+            写真撮影や媒体掲載のご相談などはこちらからお問い合わせください。
+          </p>
+          <button type="button" class="site-button site-button--contact">
+            <img
+              src="/assets/icons/ui-mail-black.svg"
+              alt=""
+              class="site-button__icon site-button__icon--mail"
+            />
+            <span>お問い合わせ</span>
+          </button>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p>本サイトは練習用の架空のウェブサイトです。表記の団体や人物、住所は実在しません。</p>
+        <p>Copyright © ICS INC., All Rights Reserved.</p>
+      </footer>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
