@@ -258,20 +258,33 @@
 .contact__media {
   position: absolute;
   inset: 0;
-  --frame-mask-image: url("/assets/masks/contact-mask.svg");
-  --frame-mask-size: 1280px 430px;
-  --frame-mask-position: 326px 539px;
+  --contact-bg-left: calc(100% * -326 / 1280);
+  --contact-bg-top: calc(100% * -539 / 430);
+  --contact-bg-width: calc(100% * 1618 / 1280);
+  --contact-bg-height: calc(100% * 1075 / 430);
 
   @media (max-width: 768px) {
-    --frame-mask-size: 360px 476px;
-    --frame-mask-position: 235px 0px;
+    --contact-bg-left: calc(100% * -235 / 360);
+    --contact-bg-top: 0px;
+    --contact-bg-width: calc(100% * 737 / 360);
+    --contact-bg-height: calc(100% * 489 / 476);
   }
+}
+
+.contact__media picture {
+  position: absolute;
+  left: var(--contact-bg-left);
+  top: var(--contact-bg-top);
+  width: var(--contact-bg-width);
+  height: var(--contact-bg-height);
+  display: block;
 }
 
 .contact__media .media-frame__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .contact__content {
