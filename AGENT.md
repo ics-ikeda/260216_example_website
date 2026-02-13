@@ -11,7 +11,6 @@
   - `npm run build`
 - エラーやワーニングが発生したら修正すること
 
-
 ## 基本行動指針
 
 - **日本語で応答**: ユーザーとの対話は常に日本語で行うこと。
@@ -31,9 +30,9 @@
 ## PR & Git運用
 
 - **PRタイトル**: `<type>: <説明>` 形式を必須（CIでチェックされる）。
-    - type: `feat` / `fix` / `docs` / `chore` / `refactor` / `perf` / `test` / `style` / `build` / `ci` / `revert`
-    - 良い例: `feat: スライド切り替え機能の実装`, `fix: 画像パスの解決ロジックを修正`
-    - 悪い例: `修正`, `機能追加`
+  - type: `feat` / `fix` / `docs` / `chore` / `refactor` / `perf` / `test` / `style` / `build` / `ci` / `revert`
+  - 良い例: `feat: スライド切り替え機能の実装`, `fix: 画像パスの解決ロジックを修正`
+  - 悪い例: `修正`, `機能追加`
 - **コミット**: 細かく論理的な単位で行うこと。
 - **テンプレート**: PR作成時は `.github/PULL_REQUEST_TEMPLATE.md` を使用し、各項目を埋めること。
 - 作業を開始するときは、`main` ブランチを fetch・pull して最新であることを確認し、`feature/<task-name>` 形式の開発用ブランチを作成してから作業すること。
