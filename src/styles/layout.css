@@ -4,7 +4,7 @@
   position: relative;
   overflow-x: visible;
 
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     overflow-x: hidden;
   }
 }
@@ -18,7 +18,7 @@
   align-items: center;
   gap: 32px;
 
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     padding-inline: 24px;
     padding-block: 60px;
   }
@@ -28,12 +28,7 @@
   padding: 0;
   height: 620px;
 
-  @media (min-width: 769px) {
-    width: 100vw;
-    margin-inline: calc(50% - 50vw);
-  }
-
-  @media (max-width: 768px) {
+  @media (width <= 768px) {
     height: 842px;
   }
 }

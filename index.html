@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="data:," />
     <title>Spectrum Night</title>
   </head>
@@ -15,14 +15,13 @@
           id="site-header__menu-toggle"
           class="site-header__menu-toggle"
           aria-label="サイトメニューを開閉"
-          aria-controls="site-header__nav"
         />
-        <label for="site-header__menu-toggle" class="site-header__menu" aria-label="メニューを開閉">
+        <label for="site-header__menu-toggle" class="site-header__menu">
           <span></span>
           <span></span>
           <span></span>
         </label>
-        <nav id="site-header__nav" class="site-header__nav" aria-label="セクション内リンク">
+        <nav id="site-header__nav" class="site-header__nav">
           <a href="#concept">
             <span class="site-header__nav-label">コンセプト</span>
             <span class="site-header__nav-title">Concept</span>
@@ -47,14 +46,10 @@
       </header>
 
       <section class="hero section section--hero">
-        <div id="hero-media" class="hero__media media-frame">
+        <div class="hero__media media-frame">
           <picture>
-            <source media="(max-width: 768px)" srcset="/assets/images/hero-photo.png" />
-            <img
-              src="/assets/images/hero-photo.png"
-              alt="夜景のメインビジュアル"
-              class="hero__image media-frame__image"
-            />
+            <source media="(width <= 768px)" srcset="/assets/images/hero-photo.png" />
+            <img src="/assets/images/hero-photo.png" alt="" class="media-frame__image" />
           </picture>
         </div>
         <div class="hero__title-area">
@@ -79,17 +74,17 @@
             />
           </div>
           <p class="section-header__subtitle">Concept</p>
-          <div class="section-header__line" aria-hidden="true"></div>
+          <div class="section-header__line"></div>
         </div>
         <p class="section-description">
           闇を光で描くアーティスト、私たちは夜景写真家チームのSpectrum Nightです。<br />都市の息吹と星々の光を紡ぎ出す夜景撮影を通じ、<br />見えない美しさを皆さまにお届けします。<br /><br />各地の夜景を巡る旅に、どうぞご一緒に。
         </p>
-        <div id="concept-media" class="media-frame concept__media">
+        <div class="media-frame concept__media">
           <picture>
-            <source media="(max-width: 768px)" srcset="/assets/images/concept-photo-mobile.png" />
+            <source media="(width <= 768px)" srcset="/assets/images/concept-photo-mobile.png" />
             <img
               src="/assets/images/concept-photo-desktop.png"
-              alt="コンセプトを表現した夜景写真"
+              alt=""
               loading="lazy"
               class="media-frame__image"
             />
@@ -113,7 +108,7 @@
             />
           </div>
           <p class="section-header__subtitle">Work</p>
-          <div class="section-header__line" aria-hidden="true"></div>
+          <div class="section-header__line"></div>
         </div>
         <p class="section-description">
           私たちの作品は、それぞれが一つの物語を持つ夜の風景を切り取ります。<br />都市の煌めきと自然の静寂が絶妙に交錯し、<br />一瞬の光景を永遠に記録し、見る者の心に深い感動を呼び起こします。
@@ -193,7 +188,7 @@
           </button>
         </div>
         <div class="work__button-area">
-          <button type="button" class="site-button site-button--more">
+          <button type="button" class="site-button">
             <span>more works</span>
             <img
               src="/assets/icons/ui-button-icon.svg"
@@ -204,32 +199,40 @@
         </div>
       </section>
 
-      <div class="work-lightbox" data-work-lightbox hidden aria-hidden="true">
+      <div class="work-lightbox" data-work-lightbox hidden>
         <button
           type="button"
           class="work-lightbox__backdrop"
-          title="全画面表示を閉じる"
+          aria-label="全画面表示を閉じる"
           data-work-lightbox-close
         ></button>
-        <div
-          class="work-lightbox__content"
-          role="dialog"
-          aria-modal="true"
-          title="作品を全画面表示"
-        >
+        <dialog class="work-lightbox__content" open aria-label="作品を全画面表示">
           <button
             type="button"
-            class="work-lightbox__nav"
+            class="work-lightbox__close"
+            data-work-lightbox-close
+            aria-label="閉じる"
+          >
+            ×
+          </button>
+          <button
+            type="button"
+            class="work-lightbox__nav work-lightbox__nav--previous"
             data-work-lightbox-previous
-            title="前の写真"
+            aria-label="前の写真"
           >
             &lt;
           </button>
           <img src="" alt="" class="work-lightbox__image" data-work-lightbox-image />
-          <button type="button" class="work-lightbox__nav" data-work-lightbox-next title="次の写真">
+          <button
+            type="button"
+            class="work-lightbox__nav work-lightbox__nav--next"
+            data-work-lightbox-next
+            aria-label="次の写真"
+          >
             &gt;
           </button>
-        </div>
+        </dialog>
       </div>
 
       <section id="team" class="section section--team">
@@ -248,7 +251,7 @@
             />
           </div>
           <p class="section-header__subtitle">Team</p>
-          <div class="section-header__line" aria-hidden="true"></div>
+          <div class="section-header__line"></div>
         </div>
         <p class="section-description">
           Spectrum Night専属のフォトグラファーを紹介。<br />得意の分野で夜景写真をキャプチャーします。
@@ -258,7 +261,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-01.png"
-                alt="Iwao Kurosawaのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -272,7 +275,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-02.png"
-                alt="Alice Taylorのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -286,7 +289,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-03.png"
-                alt="Eiji Makabeのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -300,7 +303,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-04.png"
-                alt="Koyomi Tsukishimaのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -314,7 +317,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-05.png"
-                alt="Ken Yamamotoのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -328,7 +331,7 @@
             <div class="team__image-frame media-frame">
               <img
                 src="/assets/images/team-member-06.png"
-                alt="Hikaru Hasegawaのポートレート"
+                alt=""
                 loading="lazy"
                 class="media-frame__image"
               />
@@ -357,14 +360,14 @@
             />
           </div>
           <p class="section-header__subtitle">Studio Information</p>
-          <div class="section-header__line" aria-hidden="true"></div>
+          <div class="section-header__line"></div>
         </div>
         <p class="section-description section-description--studio">スタジオの情報を紹介します。</p>
         <div class="studio__layout">
-          <div id="studio-media" class="studio__image media-frame">
+          <div class="studio__image media-frame">
             <img
               src="/assets/images/studio-photo.png"
-              alt="スタジオ外観写真"
+              alt=""
               loading="lazy"
               class="media-frame__image"
             />
@@ -405,12 +408,12 @@
       </section>
 
       <section id="contact" class="section section--contact">
-        <div id="contact-media" class="contact__media media-frame">
+        <div class="contact__media media-frame">
           <picture>
-            <source media="(max-width: 768px)" srcset="/assets/images/contact-photo.png" />
+            <source media="(width <= 768px)" srcset="/assets/images/contact-photo.png" />
             <img
               src="/assets/images/contact-photo.png"
-              alt="お問い合わせセクションの背景写真"
+              alt=""
               loading="lazy"
               class="media-frame__image"
             />
@@ -422,17 +425,17 @@
               <img
                 src="/assets/icons/ui-arrow-left-white.svg"
                 alt=""
-                class="section-header__icon section-header__icon--light section-header__icon--left"
+                class="section-header__icon section-header__icon--left"
               />
               <p class="section-header__label-text">コンタクト</p>
               <img
                 src="/assets/icons/ui-arrow-left-white.svg"
                 alt=""
-                class="section-header__icon section-header__icon--light section-header__icon--right"
+                class="section-header__icon section-header__icon--right"
               />
             </div>
             <p class="section-header__subtitle">Contact us</p>
-            <div class="section-header__line" aria-hidden="true"></div>
+            <div class="section-header__line"></div>
           </div>
           <p class="contact__message">
             写真撮影や媒体掲載のご相談などはこちらからお問い合わせください。
