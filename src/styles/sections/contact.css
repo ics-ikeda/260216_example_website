@@ -14,7 +14,6 @@
 .contact__media {
   position: absolute;
   inset: 0;
-  width: 100%;
 
   .media-frame__image {
     width: 100%;
@@ -50,7 +49,6 @@
 
   @media (width <= 768px) {
     padding-inline: 24px;
-    width: 100%;
   }
 }
 

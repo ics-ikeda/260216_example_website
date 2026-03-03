@@ -16,7 +16,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--color-bg);
+  background: white;
   color: var(--color-text);
   font-family: sans-serif;
   line-height: 1.5;

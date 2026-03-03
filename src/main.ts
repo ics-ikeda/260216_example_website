@@ -16,10 +16,10 @@ type Item = {
 const VT = "work-lightbox-image";
 const VT_OPEN = "is-work-transition-open";
 const VT_CLOSE = "is-work-transition-close";
-const C_NEXT = "is-work-lightbox-image-next";
-const C_PREV = "is-work-lightbox-image-previous";
-const C_MOTION = "is-work-lightbox-image-motion";
-const C_SNAP = "is-work-lightbox-image-snap";
+const C_NEXT = "is-work-next";
+const C_PREV = "is-work-prev";
+const C_MOTION = "is-work-motion";
+const C_SNAP = "is-work-snap";
 
 const q = <T extends Element>(sel: string): T => document.querySelector<T>(sel)!;
 /**
@@ -44,8 +44,7 @@ const runVt = ({ update, cls, done }: VtArgs) => {
   });
 };
 
-const menuToggle = q<HTMLInputElement>(".site-header__menu-toggle");
-const nav = q<HTMLElement>(".site-header__nav");
+const nav = q<HTMLDialogElement>("#menu-dialog");
 const workBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
 const lightbox = q<HTMLElement>("[data-work-lightbox]");
 const stage = q<HTMLElement>("[data-work-lightbox-image-stage]");
@@ -153,7 +152,7 @@ img.addEventListener("transitionend", (event) => {
 
 nav.addEventListener("click", (event) => {
   if ((event.target as Element).closest("a")) {
-    menuToggle.checked = false;
+    nav.close();
   }
 });
 

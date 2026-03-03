@@ -1,6 +1,4 @@
 .site {
-  width: 100%;
-  margin-inline: auto;
   position: relative;
   overflow-x: clip;
 }

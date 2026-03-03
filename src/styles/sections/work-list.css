@@ -1,0 +1,33 @@
+.section--work {
+  gap: 80px;
+
+  @media (width <= 768px) {
+    gap: 60px;
+  }
+}
+
+.work__gallery {
+  width: min(100%, 960px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: center;
+  gap: 40px;
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.work__item {
+  aspect-ratio: 17 / 10;
+  max-width: 460px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+
+  @media (width <= 768px) {
+    max-width: none;
+  }
+}

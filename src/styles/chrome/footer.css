@@ -12,11 +12,13 @@
     padding-inline: 24px;
   }
 
-  p:first-child {
-    font-size: 0.625rem;
-  }
+  p {
+    &:first-child {
+      font-size: 0.625rem;
+    }
 
-  p:last-child {
-    font-size: 0.75rem;
+    &:last-child {
+      font-size: 0.75rem;
+    }
   }
 }

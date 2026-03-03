@@ -9,40 +9,50 @@
   <body>
     <main id="top" class="site">
       <header class="site-header">
-        <a href="#top" class="site-header__brand">Spectrum Night</a>
-        <input
-          type="checkbox"
-          id="site-header__menu-toggle"
-          class="site-header__menu-toggle"
-          aria-label="サイトメニューを開閉"
-        />
-        <label for="site-header__menu-toggle" class="site-header__menu">
+        <a href="#top" class="brand">Spectrum Night</a>
+        <button
+          type="button"
+          class="menu open"
+          commandfor="menu-dialog"
+          command="show-modal"
+          aria-label="サイトメニューを開く"
+        >
           <span></span>
           <span></span>
           <span></span>
-        </label>
-        <nav id="site-header__nav" class="site-header__nav">
+        </button>
+        <dialog id="menu-dialog" class="menu-dialog" aria-label="サイトメニュー">
+          <button
+            type="button"
+            class="menu close"
+            commandfor="menu-dialog"
+            command="close"
+            aria-label="サイトメニューを閉じる"
+          >
+            <span></span>
+            <span></span>
+          </button>
           <a href="#concept">
-            <span class="site-header__nav-label">コンセプト</span>
-            <span class="site-header__nav-title">Concept</span>
+            <span class="label">コンセプト</span>
+            <span class="title">Concept</span>
           </a>
           <a href="#work">
-            <span class="site-header__nav-label">作品</span>
-            <span class="site-header__nav-title">Work</span>
+            <span class="label">作品</span>
+            <span class="title">Work</span>
           </a>
           <a href="#team">
-            <span class="site-header__nav-label">チーム</span>
-            <span class="site-header__nav-title">Team</span>
+            <span class="label">チーム</span>
+            <span class="title">Team</span>
           </a>
           <a href="#studio">
-            <span class="site-header__nav-label">スタジオ</span>
-            <span class="site-header__nav-title">Studio Information</span>
+            <span class="label">スタジオ</span>
+            <span class="title">Studio Information</span>
           </a>
           <a href="#contact">
-            <span class="site-header__nav-label">コンタクト</span>
-            <span class="site-header__nav-title">Contact us</span>
+            <span class="label">コンタクト</span>
+            <span class="title">Contact us</span>
           </a>
-        </nav>
+        </dialog>
       </header>
 
       <section class="hero section section--hero">
@@ -184,7 +194,7 @@
             />
           </button>
         </div>
-        <div class="work__button-area">
+        <div>
           <button type="button" class="site-button">
             <span>more works</span>
             <img
@@ -196,53 +206,31 @@
         </div>
       </section>
 
-      <div class="work-lightbox" data-work-lightbox hidden>
+      <div class="lightbox" data-work-lightbox hidden>
         <button
           type="button"
-          class="work-lightbox__backdrop"
+          class="backdrop"
           aria-label="全画面表示を閉じる"
           data-work-lightbox-close
         ></button>
-        <dialog class="work-lightbox__content" open aria-label="作品を全画面表示">
+        <dialog class="panel" open aria-label="作品を全画面表示">
+          <button type="button" class="close" data-work-lightbox-close aria-label="閉じる"></button>
           <button
             type="button"
-            class="work-lightbox__close"
-            data-work-lightbox-close
-            aria-label="閉じる"
-          >
-            ×
-          </button>
-          <button
-            type="button"
-            class="work-lightbox__nav work-lightbox__nav--previous"
+            class="nav prev"
             data-work-lightbox-previous
             aria-label="前の写真"
-          >
-            &lt;
-          </button>
-          <div class="work-lightbox__image-stage" data-work-lightbox-image-stage>
-            <img
-              src=""
-              alt=""
-              class="work-lightbox__image work-lightbox__image--ghost"
-              data-work-lightbox-image-ghost
-              aria-hidden="true"
-            />
-            <img
-              src=""
-              alt=""
-              class="work-lightbox__image work-lightbox__image--current"
-              data-work-lightbox-image
-            />
+          ></button>
+          <div class="stage" data-work-lightbox-image-stage>
+            <img src="" alt="" class="ghost" data-work-lightbox-image-ghost aria-hidden="true" />
+            <img src="" alt="" class="current" data-work-lightbox-image />
           </div>
           <button
             type="button"
-            class="work-lightbox__nav work-lightbox__nav--next"
+            class="nav next"
             data-work-lightbox-next
             aria-label="次の写真"
-          >
-            &gt;
-          </button>
+          ></button>
         </dialog>
       </div>
 
@@ -278,7 +266,7 @@
               />
             </div>
             <p class="team__name">Iwao Kurosawa</p>
-            <p class="team__description">
+            <p>
               都市の夜景を華麗に描く夜景写真家。ネオナイトライトビジュアルスクール出身。<br />夜の街の美しさと躍動感を写真に閉じ込め、観る者に特別な刺激を与える。
             </p>
           </article>
@@ -292,7 +280,7 @@
               />
             </div>
             <p class="team__name">Alice Taylor</p>
-            <p class="team__description">
+            <p>
               都市風景を捉える写真家。<br />イマジネーションアートスクール卒。<br />作品は詩的な瞬間を写し出すことに定評あり。
             </p>
           </article>
@@ -306,7 +294,7 @@
               />
             </div>
             <p class="team__name">Eiji Makabe</p>
-            <p class="team__description">
+            <p>
               都会の人間ドラマを捉えるドキュメンタリー写真家。<br />カルチャーメディアアートアカデミー卒業。<br />作品は、見えない物語を明らかにすることに独特の視点を持つ。
             </p>
           </article>
@@ -320,7 +308,7 @@
               />
             </div>
             <p class="team__name">Koyomi Tsukishima</p>
-            <p class="team__description">
+            <p>
               シュールな夢想を描く抽象写真家。<br />現代ビジュアルイメージングスクール出身。<br />写真を通じて夢と現実の境界をあいまいにする手法で、観る者を深く引き込む。
             </p>
           </article>
@@ -334,7 +322,7 @@
               />
             </div>
             <p class="team__name">Ken Yamamoto</p>
-            <p class="team__description">
+            <p>
               自然と人間の織りなす瞬間を追求。<br />未来創造ビジュアルアカデミー出身。<br />写真で感動を伝える手法に独自の解釈。
             </p>
           </article>
@@ -348,7 +336,7 @@
               />
             </div>
             <p class="team__name">Hikaru Hasegawa</p>
-            <p class="team__description">
+            <p>
               風景と人物を鮮烈に繋げる写真家。<br />国内外のメジャー雑誌に作品掲載、<br />その眼は時間と空間を独特な視線で結びつける。
             </p>
           </article>
@@ -386,15 +374,15 @@
           <ul class="studio__info-list">
             <li class="studio__info-item">
               <div class="studio__info-heading">住所</div>
-              <p class="studio__info-detail">〒106-0031<br />東京都 港区 西麻布0-0-0</p>
+              <p>〒106-0031<br />東京都 港区 西麻布0-0-0</p>
             </li>
             <li class="studio__info-item">
               <div class="studio__info-heading">営業時間</div>
-              <p class="studio__info-detail">11:00 - 20:00（定休日：土曜日・日曜日）</p>
+              <p>11:00 - 20:00（定休日：土曜日・日曜日）</p>
             </li>
             <li class="studio__info-item">
               <div class="studio__info-heading">アクセス</div>
-              <p class="studio__info-detail">日比谷線 広尾駅から徒歩15分</p>
+              <p>日比谷線 広尾駅から徒歩15分</p>
             </li>
           </ul>
         </div>
