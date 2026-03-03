@@ -19,7 +19,14 @@
 - 3D変換の必要がない限り `translate3d` は使わず、`translate` を使う。
 - 旧世代ベンダープレフィックス（例: `-webkit-mask`）は使わない。
 - 既定値と同じ冗長指定（例: 不要な `object-position: center`）は書かない。
+- 数値 `font-weight`（例: `500`）は禁止。`normal` / `bold` か `inherit` を使う。
 - CSSファイルは役割単位で分割し、肥大化を避ける。
+- CSS Nestingを優先する。
+- `p:first-child` のような分離セレクタは避け、`p { &:first-child { ... } }` の形でまとめる。
+- 親状態セレクタ（例: `&:hover`）で完結できる子要素指定は、親ブロック内にネストする。
+- レンジメディアクエリは境界を統一する（例: `@media (width <= 768px)` と `@media (width > 768px)`）。
+- `line-height` / `margin` / `padding` / `background` / `color` は、継承・既定値で足りる場合は指定しない。
+- CSS変数は必要最小限にする。定義1回・利用1回の変数はハードコードする。
 
 ## UIモーション
 
@@ -28,14 +35,18 @@
 - モーションは `@starting-style` と `allow-discrete` を優先して設計する。
 - ホバー時の移動量は最小限にし、過剰な移動を避ける。
 - 特別な指定がない限り、イージングはデフォルトを使う。
+- `transition` は原則 `transition: 0.3s;` を使う。
+- 離散遷移が必要な場合のみ `transition: 0.3s allow-discrete;` を使う。
+- `transition` の個別分割指定（例: `opacity ... , display ...`）は避ける。
 
 ## ナビゲーションとオーバーレイ
 
 - ハンバーガーメニューは `input[type=checkbox]` で実装しない。
-- ハンバーガーメニューは `command` / `commandfor` と `popover` を使う。
+- ハンバーガーメニューは `command` / `commandfor` と `dialog` を使う。
 - メニュー表示中はページの縦スクロールを禁止する。
 - `site-header` は `fixed` を維持する。
 - メニュー内リンクはスムーズスクロールで遷移させる（JSでのスクロール制御はしない）。
+- `:focus-visible` は原則使わない。
 
 ## Workライトボックス
 
