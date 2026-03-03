@@ -14,12 +14,12 @@
   align-items: start;
   justify-content: center;
 
-  @media (width >= 768px) and (width <= 991px) {
+  @media (768px <= width <= 991px) {
     grid-template-columns: 312px minmax(0, 326px);
     gap: 48px;
   }
 
-  @media (width <= 767px) {
+  @media (width < 768px) {
     grid-template-columns: 1fr;
     gap: 60px;
     justify-items: center;
@@ -33,12 +33,12 @@
   max-width: 480px;
   aspect-ratio: 16 / 9;
 
-  @media (width >= 768px) and (width <= 991px) {
+  @media (768px <= width <= 991px) {
     justify-self: start;
     max-width: 312px;
   }
 
-  @media (width <= 767px) {
+  @media (width < 768px) {
     justify-self: stretch;
     width: 100%;
     max-width: none;
@@ -55,11 +55,11 @@
   line-height: 1.6;
   list-style: none;
 
-  @media (width >= 768px) and (width <= 991px) {
+  @media (768px <= width <= 991px) {
     width: min(100%, 326px);
   }
 
-  @media (width <= 767px) {
+  @media (width < 768px) {
     gap: 40px;
     width: min(100%, 312px);
   }

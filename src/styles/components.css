@@ -64,7 +64,7 @@
 .section-description--studio {
   margin-bottom: 4px;
 
-  @media (width <= 767px) {
+  @media (width < 768px) {
     width: min(100%, 312px);
     margin-inline: auto;
     text-align: center;
