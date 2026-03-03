@@ -35,21 +35,27 @@
   .backdrop {
     position: absolute;
     inset: 0;
-    border: none;
-    background: rgb(0 0 0 / 80%);
     cursor: pointer;
+    background: rgb(0 0 0 / 80%);
+    border: none;
   }
 
   .panel {
     position: relative;
     z-index: 1;
-    margin: 0;
-    padding: var(--panel-pad);
-    border: none;
-    background: transparent;
     width: var(--panel-w);
     max-width: none;
+    padding: var(--panel-pad);
+    margin: 0;
+    background: transparent;
+    border: none;
     isolation: isolate;
+  }
+
+  .ghost {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
   }
 
   .stage {
@@ -57,19 +63,19 @@
     height: var(--stage-h);
 
     &.is-work-next .ghost {
-      transform: translate(-50%, -50%) translate(var(--slide), 0);
       visibility: visible;
+      transform: translate(-50%, -50%) translate(var(--slide), 0);
     }
 
     &.is-work-prev .ghost {
-      transform: translate(-50%, -50%) translate(calc(var(--slide) * -1), 0);
       visibility: visible;
+      transform: translate(-50%, -50%) translate(calc(var(--slide) * -1), 0);
     }
 
     &.is-work-motion {
       :is(.current, .ghost) {
-        mix-blend-mode: plus-lighter;
         visibility: visible;
+        mix-blend-mode: plus-lighter;
       }
 
       .current {
@@ -77,8 +83,8 @@
       }
 
       .ghost {
-        transform: translate(-50%, -50%) translate(0, 0);
         opacity: 1;
+        transform: translate(-50%, -50%) translate(0, 0);
       }
     }
 
@@ -101,20 +107,14 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    visibility: visible;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transform: translate(-50%, -50%) translate(0, 0);
-    opacity: 1;
-    visibility: visible;
     mix-blend-mode: normal;
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0);
     transition: 0.3s allow-discrete;
-  }
-
-  .ghost {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
   }
 
   :is(.close, .nav) {
@@ -122,26 +122,26 @@
     width: var(--ctrl-size);
     height: var(--ctrl-size);
     padding: 0;
-    border: none;
     appearance: none;
-    background: transparent;
     cursor: pointer;
+    background: transparent;
+    border: none;
   }
 
   .close {
-    z-index: 120;
     position: fixed;
     top: max(24px, env(safe-area-inset-top));
     right: max(24px, env(safe-area-inset-right));
+    z-index: 120;
 
     &::before,
     &::after {
-      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
       width: var(--close-line-w);
       height: 2px;
+      content: "";
       background: white;
       transform-origin: center;
     }
@@ -167,12 +167,12 @@
     transition: 0.3s;
 
     &::before {
-      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
       width: var(--arrow-w);
       height: var(--arrow-h);
+      content: "";
       background: white;
       mask: url("/assets/icons/ui-button-icon.svg") center / contain no-repeat;
       transform: translate(-50%, -50%);
@@ -210,16 +210,16 @@ html {
 
 body {
   &.is-work-lightbox-open {
-    overflow: hidden;
     padding-right: calc(100vw - 100%);
+    overflow: hidden;
   }
 }
 
 :root {
   &::view-transition-group(work-lightbox-image) {
+    overflow: clip;
     animation-duration: 360ms;
     animation-timing-function: ease;
-    overflow: clip;
   }
 
   &::view-transition-image-pair(work-lightbox-image) {

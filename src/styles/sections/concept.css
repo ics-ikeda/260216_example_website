@@ -1,6 +1,6 @@
 .section--concept {
-  padding-inline: 0;
   gap: 32px;
+  padding-inline: 0;
 
   @media (width <= 768px) {
     padding-bottom: 60px;

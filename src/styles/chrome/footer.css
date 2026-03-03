@@ -1,12 +1,12 @@
 .site-footer {
-  padding-block: 40px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   align-items: center;
-  text-align: center;
-  line-height: 1.6;
+  padding-block: 40px;
   padding-inline: 40px;
+  line-height: 1.6;
+  text-align: center;
 
   @media (width <= 768px) {
     padding-inline: 24px;
