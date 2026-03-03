@@ -1,0 +1,23 @@
+.section--concept {
+  padding-inline: 0;
+  gap: 32px;
+
+  @media (width <= 768px) {
+    padding-bottom: 60px;
+
+    .section-header,
+    .section-description {
+      width: 100%;
+      padding-inline: 24px;
+    }
+  }
+}
+
+.concept__media {
+  width: 100%;
+  height: 300px;
+
+  @media (width <= 768px) {
+    height: 280px;
+  }
+}

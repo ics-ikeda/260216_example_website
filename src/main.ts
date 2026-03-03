@@ -1,303 +1,194 @@
 import "./style.css";
 
-interface WorkViewTransitionOptions {
-  updateDom: () => void;
-  transitionClassName: string;
-  onFinished?: () => void;
-}
+type VtArgs = {
+  update: () => void;
+  cls: string;
+  done: () => void;
+};
 
-interface WorkItem {
-  triggerElement: HTMLButtonElement;
-  thumbnailImageElement: HTMLImageElement;
-  imagePath: string;
-  imageAlt: string;
-}
+type Item = {
+  btn: HTMLButtonElement;
+  thumb: HTMLImageElement;
+  src: string;
+  alt: string;
+};
 
-const workLightboxImageTransitionName = "work-lightbox-image";
-const workOpenTransitionClassName = "is-work-transition-open";
-const workCloseTransitionClassName = "is-work-transition-close";
-const workLightboxImageNextMotionClassName = "is-work-lightbox-image-next";
-const workLightboxImagePreviousMotionClassName = "is-work-lightbox-image-previous";
-const workLightboxImageMotionClassName = "is-work-lightbox-image-motion";
-const workLightboxImageSnapClassName = "is-work-lightbox-image-snap";
-const workLightboxImageMotionDurationMs = 260;
-let isWorkViewTransitionRunning = false;
-let workLightboxImageMotionResetTimerId: number | null = null;
+const VT = "work-lightbox-image";
+const VT_OPEN = "is-work-transition-open";
+const VT_CLOSE = "is-work-transition-close";
+const C_NEXT = "is-work-lightbox-image-next";
+const C_PREV = "is-work-lightbox-image-previous";
+const C_MOTION = "is-work-lightbox-image-motion";
+const C_SNAP = "is-work-lightbox-image-snap";
+
+const q = <T extends Element>(sel: string): T => document.querySelector<T>(sel)!;
+/**
+ * インデックスを循環配列の範囲に正規化します。
+ */
+const loop = (i: number, count: number): number => ((i % count) + count) % count;
+/**
+ * 画像要素の view-transition-name を設定します。
+ */
+const setVt = (img: HTMLImageElement, name: string) => {
+  img.style.viewTransitionName = name;
+};
 
 /**
- * View Transitions APIでDOM更新をアニメーションします。
+ * View Transitions API で DOM 更新をアニメーションします。
  */
-const runWorkViewTransition = ({
-  updateDom,
-  transitionClassName,
-  onFinished,
-}: WorkViewTransitionOptions) => {
-  if (typeof document.startViewTransition !== "function" || isWorkViewTransitionRunning) {
-    updateDom();
-    onFinished?.();
-    return;
-  }
-
-  document.documentElement.classList.add(transitionClassName);
-  isWorkViewTransitionRunning = true;
-  let workViewTransition: ViewTransition;
-  try {
-    workViewTransition = document.startViewTransition(updateDom);
-  } catch {
-    isWorkViewTransitionRunning = false;
-    document.documentElement.classList.remove(transitionClassName);
-    updateDom();
-    onFinished?.();
-    return;
-  }
-  workViewTransition.finished.finally(() => {
-    isWorkViewTransitionRunning = false;
-    document.documentElement.classList.remove(transitionClassName);
-    onFinished?.();
+const runVt = ({ update, cls, done }: VtArgs) => {
+  document.documentElement.classList.add(cls);
+  document.startViewTransition(update).finished.finally(() => {
+    document.documentElement.classList.remove(cls);
+    done();
   });
 };
 
-/**
- * カルーセルの範囲内へインデックスを正規化します。
- */
-const toLoopedIndex = (targetIndex: number, imageCount: number): number => {
-  return ((targetIndex % imageCount) + imageCount) % imageCount;
-};
+const menuToggle = q<HTMLInputElement>(".site-header__menu-toggle");
+const nav = q<HTMLElement>(".site-header__nav");
+const workBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
+const lightbox = q<HTMLElement>("[data-work-lightbox]");
+const stage = q<HTMLElement>("[data-work-lightbox-image-stage]");
+const img = q<HTMLImageElement>("[data-work-lightbox-image]");
+const ghost = q<HTMLImageElement>("[data-work-lightbox-image-ghost]");
 
-/**
- * 画像要素の `view-transition-name` を設定します。
- */
-const setViewTransitionName = (imageElement: HTMLImageElement, transitionName: string) => {
-  imageElement.style.viewTransitionName = transitionName;
-};
-
-const siteHeaderMenuToggleElement = document.querySelector<HTMLInputElement>(
-  ".site-header__menu-toggle",
-)!;
-const siteHeaderNavElement = document.querySelector<HTMLElement>(".site-header__nav")!;
-const workTriggerElements = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
-const workLightboxElement = document.querySelector<HTMLElement>("[data-work-lightbox]")!;
-const workLightboxImageStageElement = document.querySelector<HTMLElement>(
-  "[data-work-lightbox-image-stage]",
-)!;
-const workLightboxImageElement = document.querySelector<HTMLImageElement>(
-  "[data-work-lightbox-image]",
-)!;
-const workLightboxGhostImageElement = document.querySelector<HTMLImageElement>(
-  "[data-work-lightbox-image-ghost]",
-)!;
-const workItemList = workTriggerElements.map((workTriggerElement) => {
-  const thumbnailImageElement =
-    workTriggerElement.querySelector<HTMLImageElement>(".media-frame__image")!;
-  const imagePath = thumbnailImageElement.src;
-  return {
-    triggerElement: workTriggerElement,
-    thumbnailImageElement,
-    imagePath,
-    imageAlt: thumbnailImageElement.alt,
-  } satisfies WorkItem;
+const items: Item[] = workBtns.map((btn) => {
+  const thumb = btn.querySelector<HTMLImageElement>(".media-frame__image")!;
+  return { btn, thumb, src: thumb.src, alt: thumb.alt };
 });
 
-let currentWorkImageIndex = 0;
+let index = 0;
+
+const itemAt = (i: number): Item => items[loop(i, items.length)];
+const clearMotion = () => stage.classList.remove(C_NEXT, C_PREV, C_MOTION, C_SNAP);
+const reflow = () => stage.getBoundingClientRect();
 
 /**
- * 指定インデックスに対応する一覧画像要素を取得します。
+ * ライトボックスに指定画像を表示します。
  */
-const getWorkThumbnailImageElement = (imageIndex: number): HTMLImageElement => {
-  const selectedWorkImageIndex = toLoopedIndex(imageIndex, workItemList.length);
-  return workItemList[selectedWorkImageIndex].thumbnailImageElement;
-};
-
-/**
- * ライトボックスに表示する画像を更新します。
- */
-const renderWorkImage = (targetIndex: number) => {
-  const nextWorkImageIndex = toLoopedIndex(targetIndex, workItemList.length);
-  const selectedWorkItem = workItemList[nextWorkImageIndex];
-  currentWorkImageIndex = nextWorkImageIndex;
-  workLightboxImageElement.src = selectedWorkItem.imagePath;
-  workLightboxImageElement.alt = selectedWorkItem.imageAlt;
-};
-
-const resetWorkLightboxImageMotion = () => {
-  workLightboxImageStageElement.classList.remove(
-    workLightboxImageNextMotionClassName,
-    workLightboxImagePreviousMotionClassName,
-    workLightboxImageMotionClassName,
-    workLightboxImageSnapClassName,
-  );
-  if (workLightboxImageMotionResetTimerId !== null) {
-    window.clearTimeout(workLightboxImageMotionResetTimerId);
-    workLightboxImageMotionResetTimerId = null;
-  }
-};
-
-const forceWorkLightboxImageReflow = () => {
-  workLightboxImageStageElement.getBoundingClientRect();
+const show = (i: number) => {
+  const item = itemAt(i);
+  index = loop(i, items.length);
+  img.src = item.src;
+  img.alt = item.alt;
 };
 
 /**
- * ライトボックス画像に前後移動のモーションを適用します。
+ * prev/next モーション終了後の表示状態を確定します。
  */
-const finalizeWorkLightboxImageMotion = () => {
-  if (!workLightboxImageStageElement.classList.contains(workLightboxImageMotionClassName)) {
-    return;
-  }
-  if (workLightboxImageMotionResetTimerId !== null) {
-    window.clearTimeout(workLightboxImageMotionResetTimerId);
-    workLightboxImageMotionResetTimerId = null;
-  }
-  workLightboxImageStageElement.classList.add(workLightboxImageSnapClassName);
-  if (workLightboxGhostImageElement.src) {
-    workLightboxImageElement.src = workLightboxGhostImageElement.src;
-    workLightboxImageElement.alt = workLightboxGhostImageElement.alt;
-  }
-  workLightboxGhostImageElement.src = "";
-  workLightboxGhostImageElement.alt = "";
-  workLightboxImageStageElement.classList.remove(
-    workLightboxImageNextMotionClassName,
-    workLightboxImagePreviousMotionClassName,
-    workLightboxImageMotionClassName,
-  );
-  forceWorkLightboxImageReflow();
-  workLightboxImageStageElement.classList.remove(workLightboxImageSnapClassName);
-};
-
-const playWorkLightboxImageMotion = (
-  offset: number,
-  nextImagePath: string,
-  nextImageAlt: string,
-) => {
-  resetWorkLightboxImageMotion();
-  workLightboxGhostImageElement.src = nextImagePath;
-  workLightboxGhostImageElement.alt = nextImageAlt;
-  const directionClassName =
-    offset > 0 ? workLightboxImageNextMotionClassName : workLightboxImagePreviousMotionClassName;
-  workLightboxImageStageElement.classList.add(workLightboxImageSnapClassName, directionClassName);
-  forceWorkLightboxImageReflow();
-  workLightboxImageStageElement.classList.remove(workLightboxImageSnapClassName);
-  forceWorkLightboxImageReflow();
-  workLightboxImageStageElement.classList.add(workLightboxImageMotionClassName);
-  workLightboxImageMotionResetTimerId = window.setTimeout(() => {
-    finalizeWorkLightboxImageMotion();
-  }, workLightboxImageMotionDurationMs);
+const finishMotion = () => {
+  stage.classList.add(C_SNAP);
+  show(index);
+  ghost.src = "";
+  ghost.alt = "";
+  stage.classList.remove(C_NEXT, C_PREV, C_MOTION);
+  reflow();
+  stage.classList.remove(C_SNAP);
 };
 
 /**
- * ライトボックスを開き、指定インデックスの画像を表示します。
+ * prev/next モーションを開始します。
  */
-const openWorkLightbox = (targetIndex: number) => {
-  const selectedWorkThumbnailImageElement = getWorkThumbnailImageElement(targetIndex);
-  setViewTransitionName(selectedWorkThumbnailImageElement, workLightboxImageTransitionName);
-  runWorkViewTransition({
-    transitionClassName: workOpenTransitionClassName,
-    updateDom: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-      setViewTransitionName(workLightboxImageElement, workLightboxImageTransitionName);
-      renderWorkImage(targetIndex);
-      resetWorkLightboxImageMotion();
-      workLightboxGhostImageElement.src = "";
-      workLightboxGhostImageElement.alt = "";
-      workLightboxElement.hidden = false;
+const startMotion = (offset: number) => {
+  const item = itemAt(index + offset);
+  index = loop(index + offset, items.length);
+  clearMotion();
+  ghost.src = item.src;
+  ghost.alt = item.alt;
+  stage.classList.add(C_SNAP, offset > 0 ? C_NEXT : C_PREV);
+  reflow();
+  stage.classList.remove(C_SNAP);
+  reflow();
+  stage.classList.add(C_MOTION);
+};
+
+/**
+ * ライトボックスを開きます。
+ */
+const open = (i: number) => {
+  const thumb = itemAt(i).thumb;
+  setVt(thumb, VT);
+  runVt({
+    cls: VT_OPEN,
+    update: () => {
+      setVt(thumb, "");
+      setVt(img, VT);
+      show(i);
+      clearMotion();
+      ghost.src = "";
+      ghost.alt = "";
+      lightbox.hidden = false;
       document.body.classList.add("is-work-lightbox-open");
     },
-    onFinished: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-    },
+    done: () => setVt(thumb, ""),
   });
 };
 
 /**
  * ライトボックスを閉じます。
  */
-const closeWorkLightbox = () => {
-  const selectedWorkThumbnailImageElement = getWorkThumbnailImageElement(currentWorkImageIndex);
-  runWorkViewTransition({
-    transitionClassName: workCloseTransitionClassName,
-    updateDom: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, workLightboxImageTransitionName);
-      setViewTransitionName(workLightboxImageElement, "");
-      resetWorkLightboxImageMotion();
-      workLightboxGhostImageElement.src = "";
-      workLightboxGhostImageElement.alt = "";
-      workLightboxElement.hidden = true;
+const close = () => {
+  const thumb = itemAt(index).thumb;
+  runVt({
+    cls: VT_CLOSE,
+    update: () => {
+      setVt(thumb, VT);
+      setVt(img, "");
+      clearMotion();
+      ghost.src = "";
+      ghost.alt = "";
+      lightbox.hidden = true;
       document.body.classList.remove("is-work-lightbox-open");
     },
-    onFinished: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-    },
+    done: () => setVt(thumb, ""),
   });
 };
 
-/**
- * ライトボックス内の画像を前後に移動します。
- */
-const moveWorkLightboxImage = (offset: number) => {
-  const nextWorkImageIndex = toLoopedIndex(currentWorkImageIndex + offset, workItemList.length);
-  const selectedWorkItem = workItemList[nextWorkImageIndex];
-  currentWorkImageIndex = nextWorkImageIndex;
-  playWorkLightboxImageMotion(offset, selectedWorkItem.imagePath, selectedWorkItem.imageAlt);
-};
-
-workLightboxImageStageElement.addEventListener("transitionend", (transitionEvent) => {
-  if (!workLightboxImageStageElement.classList.contains(workLightboxImageMotionClassName)) {
+img.addEventListener("transitionend", (event) => {
+  if (!stage.classList.contains(C_MOTION) || event.propertyName !== "transform") {
     return;
   }
-  if (transitionEvent.propertyName !== "transform") {
-    return;
-  }
-  if (!(transitionEvent.target instanceof HTMLImageElement)) {
-    return;
-  }
-  if (!transitionEvent.target.classList.contains("work-lightbox__image--current")) {
-    return;
-  }
-  finalizeWorkLightboxImageMotion();
+  finishMotion();
 });
 
-siteHeaderNavElement.addEventListener("click", (mouseEvent) => {
-  const clickedElement = mouseEvent.target as Element;
-  if (clickedElement.closest("a")) {
-    siteHeaderMenuToggleElement.checked = false;
+nav.addEventListener("click", (event) => {
+  if ((event.target as Element).closest("a")) {
+    menuToggle.checked = false;
   }
 });
 
-workItemList.forEach(({ triggerElement }, imageIndex) => {
-  triggerElement.addEventListener("click", () => {
-    openWorkLightbox(imageIndex);
-  });
+items.forEach(({ btn }, i) => {
+  btn.addEventListener("click", () => open(i));
 });
 
-workLightboxElement.addEventListener("click", (mouseEvent) => {
-  const clickedElement = mouseEvent.target as Element;
-  if (clickedElement.closest("[data-work-lightbox-close]")) {
-    closeWorkLightbox();
+lightbox.addEventListener("click", (event) => {
+  const el = event.target as Element;
+  if (el.closest("[data-work-lightbox-close]")) {
+    close();
     return;
   }
-  if (clickedElement.closest("[data-work-lightbox-previous]")) {
-    moveWorkLightboxImage(-1);
+  if (el.closest("[data-work-lightbox-previous]")) {
+    startMotion(-1);
     return;
   }
-  if (clickedElement.closest("[data-work-lightbox-next]")) {
-    moveWorkLightboxImage(1);
+  if (el.closest("[data-work-lightbox-next]")) {
+    startMotion(1);
   }
 });
 
-document.addEventListener("keydown", (keyboardEvent) => {
-  if (workLightboxElement.hidden) {
+document.addEventListener("keydown", (event) => {
+  if (lightbox.hidden) {
     return;
   }
-  switch (keyboardEvent.key) {
-    case "ArrowLeft":
-      moveWorkLightboxImage(-1);
-      break;
-    case "ArrowRight":
-      moveWorkLightboxImage(1);
-      break;
-    case "Escape":
-      closeWorkLightbox();
-      break;
-    default:
-      break;
+  if (event.key === "ArrowLeft") {
+    startMotion(-1);
+    return;
+  }
+  if (event.key === "ArrowRight") {
+    startMotion(1);
+    return;
+  }
+  if (event.key === "Escape") {
+    close();
   }
 });
