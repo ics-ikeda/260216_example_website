@@ -1,12 +1,8 @@
 .site {
-  width: min(100%, var(--container-max));
+  width: 100%;
   margin-inline: auto;
   position: relative;
-  overflow-x: visible;
-
-  @media (width <= 768px) {
-    overflow-x: hidden;
-  }
+  overflow-x: clip;
 }
 
 .section {

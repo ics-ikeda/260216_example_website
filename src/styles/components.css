@@ -83,7 +83,7 @@
 }
 
 .site-button {
-  margin-top: 32px;
+  margin-top: 0;
   background: white;
   border: 1px solid var(--color-text);
   color: var(--color-text);
@@ -96,6 +96,7 @@
   align-items: center;
   gap: 4px;
   font-size: 1rem;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
   transition: 200ms;
@@ -133,8 +134,10 @@
 
 .site-button__icon {
   &.site-button__icon--arrow {
-    width: 7px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
+    padding: 6px 8px;
+    box-sizing: border-box;
   }
 
   &.site-button__icon--mail {

@@ -223,7 +223,21 @@
           >
             &lt;
           </button>
-          <img src="" alt="" class="work-lightbox__image" data-work-lightbox-image />
+          <div class="work-lightbox__image-stage" data-work-lightbox-image-stage>
+            <img
+              src=""
+              alt=""
+              class="work-lightbox__image work-lightbox__image--ghost"
+              data-work-lightbox-image-ghost
+              aria-hidden="true"
+            />
+            <img
+              src=""
+              alt=""
+              class="work-lightbox__image work-lightbox__image--current"
+              data-work-lightbox-image
+            />
+          </div>
           <button
             type="button"
             class="work-lightbox__nav work-lightbox__nav--next"

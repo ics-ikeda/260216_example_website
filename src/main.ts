@@ -10,13 +10,19 @@ interface WorkItem {
   triggerElement: HTMLButtonElement;
   thumbnailImageElement: HTMLImageElement;
   imagePath: string;
+  imageAlt: string;
 }
 
 const workLightboxImageTransitionName = "work-lightbox-image";
 const workOpenTransitionClassName = "is-work-transition-open";
 const workCloseTransitionClassName = "is-work-transition-close";
-const workNextTransitionClassName = "is-work-transition-next";
-const workPreviousTransitionClassName = "is-work-transition-previous";
+const workLightboxImageNextMotionClassName = "is-work-lightbox-image-next";
+const workLightboxImagePreviousMotionClassName = "is-work-lightbox-image-previous";
+const workLightboxImageMotionClassName = "is-work-lightbox-image-motion";
+const workLightboxImageSnapClassName = "is-work-lightbox-image-snap";
+const workLightboxImageMotionDurationMs = 260;
+let isWorkViewTransitionRunning = false;
+let workLightboxImageMotionResetTimerId: number | null = null;
 
 /**
  * View Transitions APIでDOM更新をアニメーションします。
@@ -26,9 +32,26 @@ const runWorkViewTransition = ({
   transitionClassName,
   onFinished,
 }: WorkViewTransitionOptions) => {
+  if (typeof document.startViewTransition !== "function" || isWorkViewTransitionRunning) {
+    updateDom();
+    onFinished?.();
+    return;
+  }
+
   document.documentElement.classList.add(transitionClassName);
-  const workViewTransition = document.startViewTransition(updateDom);
+  isWorkViewTransitionRunning = true;
+  let workViewTransition: ViewTransition;
+  try {
+    workViewTransition = document.startViewTransition(updateDom);
+  } catch {
+    isWorkViewTransitionRunning = false;
+    document.documentElement.classList.remove(transitionClassName);
+    updateDom();
+    onFinished?.();
+    return;
+  }
   workViewTransition.finished.finally(() => {
+    isWorkViewTransitionRunning = false;
     document.documentElement.classList.remove(transitionClassName);
     onFinished?.();
   });
@@ -54,8 +77,14 @@ const siteHeaderMenuToggleElement = document.querySelector<HTMLInputElement>(
 const siteHeaderNavElement = document.querySelector<HTMLElement>(".site-header__nav")!;
 const workTriggerElements = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
 const workLightboxElement = document.querySelector<HTMLElement>("[data-work-lightbox]")!;
+const workLightboxImageStageElement = document.querySelector<HTMLElement>(
+  "[data-work-lightbox-image-stage]",
+)!;
 const workLightboxImageElement = document.querySelector<HTMLImageElement>(
   "[data-work-lightbox-image]",
+)!;
+const workLightboxGhostImageElement = document.querySelector<HTMLImageElement>(
+  "[data-work-lightbox-image-ghost]",
 )!;
 const workItemList = workTriggerElements.map((workTriggerElement) => {
   const thumbnailImageElement =
@@ -65,6 +94,7 @@ const workItemList = workTriggerElements.map((workTriggerElement) => {
     triggerElement: workTriggerElement,
     thumbnailImageElement,
     imagePath,
+    imageAlt: thumbnailImageElement.alt,
   } satisfies WorkItem;
 });
 
@@ -86,6 +116,71 @@ const renderWorkImage = (targetIndex: number) => {
   const selectedWorkItem = workItemList[nextWorkImageIndex];
   currentWorkImageIndex = nextWorkImageIndex;
   workLightboxImageElement.src = selectedWorkItem.imagePath;
+  workLightboxImageElement.alt = selectedWorkItem.imageAlt;
+};
+
+const resetWorkLightboxImageMotion = () => {
+  workLightboxImageStageElement.classList.remove(
+    workLightboxImageNextMotionClassName,
+    workLightboxImagePreviousMotionClassName,
+    workLightboxImageMotionClassName,
+    workLightboxImageSnapClassName,
+  );
+  if (workLightboxImageMotionResetTimerId !== null) {
+    window.clearTimeout(workLightboxImageMotionResetTimerId);
+    workLightboxImageMotionResetTimerId = null;
+  }
+};
+
+const forceWorkLightboxImageReflow = () => {
+  workLightboxImageStageElement.getBoundingClientRect();
+};
+
+/**
+ * ライトボックス画像に前後移動のモーションを適用します。
+ */
+const finalizeWorkLightboxImageMotion = () => {
+  if (!workLightboxImageStageElement.classList.contains(workLightboxImageMotionClassName)) {
+    return;
+  }
+  if (workLightboxImageMotionResetTimerId !== null) {
+    window.clearTimeout(workLightboxImageMotionResetTimerId);
+    workLightboxImageMotionResetTimerId = null;
+  }
+  workLightboxImageStageElement.classList.add(workLightboxImageSnapClassName);
+  if (workLightboxGhostImageElement.src) {
+    workLightboxImageElement.src = workLightboxGhostImageElement.src;
+    workLightboxImageElement.alt = workLightboxGhostImageElement.alt;
+  }
+  workLightboxGhostImageElement.src = "";
+  workLightboxGhostImageElement.alt = "";
+  workLightboxImageStageElement.classList.remove(
+    workLightboxImageNextMotionClassName,
+    workLightboxImagePreviousMotionClassName,
+    workLightboxImageMotionClassName,
+  );
+  forceWorkLightboxImageReflow();
+  workLightboxImageStageElement.classList.remove(workLightboxImageSnapClassName);
+};
+
+const playWorkLightboxImageMotion = (
+  offset: number,
+  nextImagePath: string,
+  nextImageAlt: string,
+) => {
+  resetWorkLightboxImageMotion();
+  workLightboxGhostImageElement.src = nextImagePath;
+  workLightboxGhostImageElement.alt = nextImageAlt;
+  const directionClassName =
+    offset > 0 ? workLightboxImageNextMotionClassName : workLightboxImagePreviousMotionClassName;
+  workLightboxImageStageElement.classList.add(workLightboxImageSnapClassName, directionClassName);
+  forceWorkLightboxImageReflow();
+  workLightboxImageStageElement.classList.remove(workLightboxImageSnapClassName);
+  forceWorkLightboxImageReflow();
+  workLightboxImageStageElement.classList.add(workLightboxImageMotionClassName);
+  workLightboxImageMotionResetTimerId = window.setTimeout(() => {
+    finalizeWorkLightboxImageMotion();
+  }, workLightboxImageMotionDurationMs);
 };
 
 /**
@@ -100,6 +195,9 @@ const openWorkLightbox = (targetIndex: number) => {
       setViewTransitionName(selectedWorkThumbnailImageElement, "");
       setViewTransitionName(workLightboxImageElement, workLightboxImageTransitionName);
       renderWorkImage(targetIndex);
+      resetWorkLightboxImageMotion();
+      workLightboxGhostImageElement.src = "";
+      workLightboxGhostImageElement.alt = "";
       workLightboxElement.hidden = false;
       document.body.classList.add("is-work-lightbox-open");
     },
@@ -119,6 +217,9 @@ const closeWorkLightbox = () => {
     updateDom: () => {
       setViewTransitionName(selectedWorkThumbnailImageElement, workLightboxImageTransitionName);
       setViewTransitionName(workLightboxImageElement, "");
+      resetWorkLightboxImageMotion();
+      workLightboxGhostImageElement.src = "";
+      workLightboxGhostImageElement.alt = "";
       workLightboxElement.hidden = true;
       document.body.classList.remove("is-work-lightbox-open");
     },
@@ -132,15 +233,27 @@ const closeWorkLightbox = () => {
  * ライトボックス内の画像を前後に移動します。
  */
 const moveWorkLightboxImage = (offset: number) => {
-  const transitionClassName =
-    offset > 0 ? workNextTransitionClassName : workPreviousTransitionClassName;
-  runWorkViewTransition({
-    transitionClassName,
-    updateDom: () => {
-      renderWorkImage(currentWorkImageIndex + offset);
-    },
-  });
+  const nextWorkImageIndex = toLoopedIndex(currentWorkImageIndex + offset, workItemList.length);
+  const selectedWorkItem = workItemList[nextWorkImageIndex];
+  currentWorkImageIndex = nextWorkImageIndex;
+  playWorkLightboxImageMotion(offset, selectedWorkItem.imagePath, selectedWorkItem.imageAlt);
 };
+
+workLightboxImageStageElement.addEventListener("transitionend", (transitionEvent) => {
+  if (!workLightboxImageStageElement.classList.contains(workLightboxImageMotionClassName)) {
+    return;
+  }
+  if (transitionEvent.propertyName !== "transform") {
+    return;
+  }
+  if (!(transitionEvent.target instanceof HTMLImageElement)) {
+    return;
+  }
+  if (!transitionEvent.target.classList.contains("work-lightbox__image--current")) {
+    return;
+  }
+  finalizeWorkLightboxImageMotion();
+});
 
 siteHeaderNavElement.addEventListener("click", (mouseEvent) => {
   const clickedElement = mouseEvent.target as Element;
