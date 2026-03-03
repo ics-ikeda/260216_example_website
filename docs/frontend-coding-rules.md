@@ -25,8 +25,11 @@
 - `p:first-child` のような分離セレクタは避け、`p { &:first-child { ... } }` の形でまとめる。
 - 親状態セレクタ（例: `&:hover`）で完結できる子要素指定は、親ブロック内にネストする。
 - レンジメディアクエリは境界を統一する（例: `@media (width <= 768px)` と `@media (width > 768px)`）。
+- `@media (width <= 767px)` は使用せず、`@media (width < 768px)` を使う。
+- 範囲条件は `and` 連結より連鎖レンジを優先する（例: `@media (768px <= width <= 991px)`）。
 - `line-height` / `margin` / `padding` / `background` / `color` は、継承・既定値で足りる場合は指定しない。
 - CSS変数は必要最小限にする。定義1回・利用1回の変数はハードコードする。
+- CSS検証は `stylelint-config-recommended` + `stylelint-config-recess-order` を基本とし、ルールセット中心で運用する。
 
 ## UIモーション
 
@@ -38,6 +41,7 @@
 - `transition` は原則 `transition: 0.3s;` を使う。
 - 離散遷移が必要な場合のみ `transition: 0.3s allow-discrete;` を使う。
 - `transition` の個別分割指定（例: `opacity ... , display ...`）は避ける。
+- スタッガーは `&:nth-of-type(...)` ではなく `sibling-index()` を優先する。
 
 ## ナビゲーションとオーバーレイ
 
