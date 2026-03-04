@@ -1,7 +1,0 @@
----
-description:
-globs:
-alwaysApply: true
----
-
-- ルールの正本は `AGENTS.md`。重複記載がある場合は `AGENTS.md` を優先すること
