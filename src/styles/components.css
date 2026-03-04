@@ -1,8 +1,8 @@
 .section-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 
   @media (width <= 768px) {
     gap: 14px;
@@ -10,7 +10,7 @@
 }
 
 .section-header__label {
-  display: inline-flex;
+  display: inline flex;
   align-items: center;
 }
 
@@ -34,11 +34,11 @@
 }
 
 .section-header__icon {
+  box-sizing: border-box;
+  flex: 0 0 auto;
   width: 24px;
   height: 24px;
   padding: 5px 8px 6px;
-  box-sizing: border-box;
-  flex: 0 0 auto;
 
   &.section-header__icon--left {
     scale: 1 -1;
@@ -50,24 +50,24 @@
 }
 
 .section-description {
+  max-width: 1024px;
   font-size: 1rem;
   line-height: 1.6;
   text-align: center;
-  max-width: 1024px;
 
   @media (width <= 768px) {
-    text-align: left;
     width: 100%;
+    text-align: left;
   }
 }
 
 .section-description--studio {
   margin-bottom: 4px;
 
-  @media (width <= 767px) {
-    text-align: center;
+  @media (width < 768px) {
     width: min(100%, 312px);
     margin-inline: auto;
+    text-align: center;
   }
 }
 
@@ -83,47 +83,37 @@
 }
 
 .site-button {
-  margin-top: 32px;
-  background: white;
-  border: 1px solid var(--color-text);
-  color: var(--color-text);
-  min-width: 0;
+  display: inline flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
   width: 267px;
   padding-block: 20px;
   padding-inline: 64px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
   font-size: 1rem;
   line-height: 1;
+  color: var(--color-text);
   cursor: pointer;
-  transition: 200ms;
+  background: white;
+  border: 1px solid var(--color-text);
+  transition: 0.3s;
 
   .site-button__icon {
     flex: 0 0 auto;
-    transition: 200ms;
+    transition: 0.3s;
   }
 
-  &:hover,
-  &:focus-visible {
-    background: var(--color-text);
+  &:hover {
     color: white;
+    background: var(--color-text);
     box-shadow: inset 0 0 0 1px white;
+    .site-button__icon {
+      filter: invert(1);
+    }
   }
 
   &:active {
     background: rgb(30 30 30 / 85%);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-text);
-    outline-offset: 2px;
-  }
-
-  &:hover .site-button__icon,
-  &:focus-visible .site-button__icon {
-    filter: invert(1);
   }
 
   &.site-button--contact {
@@ -133,8 +123,10 @@
 
 .site-button__icon {
   &.site-button__icon--arrow {
-    width: 7px;
-    height: 12px;
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    padding: 6px 8px;
   }
 
   &.site-button__icon--mail {

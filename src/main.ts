@@ -1,190 +1,193 @@
 import "./style.css";
 
-interface WorkViewTransitionOptions {
-  updateDom: () => void;
-  transitionClassName: string;
-  onFinished?: () => void;
-}
+type VtArgs = {
+  update: () => void;
+  cls: string;
+  done: () => void;
+};
 
-interface WorkItem {
-  triggerElement: HTMLButtonElement;
-  thumbnailImageElement: HTMLImageElement;
-  imagePath: string;
-}
+type Item = {
+  btn: HTMLButtonElement;
+  thumb: HTMLImageElement;
+  src: string;
+  alt: string;
+};
 
-const workLightboxImageTransitionName = "work-lightbox-image";
-const workOpenTransitionClassName = "is-work-transition-open";
-const workCloseTransitionClassName = "is-work-transition-close";
-const workNextTransitionClassName = "is-work-transition-next";
-const workPreviousTransitionClassName = "is-work-transition-previous";
+const VT = "work-lightbox-image";
+const VT_OPEN = "is-work-transition-open";
+const VT_CLOSE = "is-work-transition-close";
+const C_NEXT = "is-work-next";
+const C_PREV = "is-work-prev";
+const C_MOTION = "is-work-motion";
+const C_SNAP = "is-work-snap";
+
+const q = <T extends Element>(sel: string): T => document.querySelector<T>(sel)!;
+/**
+ * インデックスを循環配列の範囲に正規化します。
+ */
+const loop = (i: number, count: number): number => ((i % count) + count) % count;
+/**
+ * 画像要素の view-transition-name を設定します。
+ */
+const setVt = (img: HTMLImageElement, name: string) => {
+  img.style.viewTransitionName = name;
+};
 
 /**
- * View Transitions APIでDOM更新をアニメーションします。
+ * View Transitions API で DOM 更新をアニメーションします。
  */
-const runWorkViewTransition = ({
-  updateDom,
-  transitionClassName,
-  onFinished,
-}: WorkViewTransitionOptions) => {
-  document.documentElement.classList.add(transitionClassName);
-  const workViewTransition = document.startViewTransition(updateDom);
-  workViewTransition.finished.finally(() => {
-    document.documentElement.classList.remove(transitionClassName);
-    onFinished?.();
+const runVt = ({ update, cls, done }: VtArgs) => {
+  document.documentElement.classList.add(cls);
+  document.startViewTransition(update).finished.finally(() => {
+    document.documentElement.classList.remove(cls);
+    done();
   });
 };
 
-/**
- * カルーセルの範囲内へインデックスを正規化します。
- */
-const toLoopedIndex = (targetIndex: number, imageCount: number): number => {
-  return ((targetIndex % imageCount) + imageCount) % imageCount;
-};
+const nav = q<HTMLDialogElement>("#menu-dialog");
+const workBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
+const lightbox = q<HTMLElement>("[data-work-lightbox]");
+const stage = q<HTMLElement>("[data-work-lightbox-image-stage]");
+const img = q<HTMLImageElement>("[data-work-lightbox-image]");
+const ghost = q<HTMLImageElement>("[data-work-lightbox-image-ghost]");
 
-/**
- * 画像要素の `view-transition-name` を設定します。
- */
-const setViewTransitionName = (imageElement: HTMLImageElement, transitionName: string) => {
-  imageElement.style.viewTransitionName = transitionName;
-};
-
-const siteHeaderMenuToggleElement = document.querySelector<HTMLInputElement>(
-  ".site-header__menu-toggle",
-)!;
-const siteHeaderNavElement = document.querySelector<HTMLElement>(".site-header__nav")!;
-const workTriggerElements = Array.from(document.querySelectorAll<HTMLButtonElement>(".work__item"));
-const workLightboxElement = document.querySelector<HTMLElement>("[data-work-lightbox]")!;
-const workLightboxImageElement = document.querySelector<HTMLImageElement>(
-  "[data-work-lightbox-image]",
-)!;
-const workItemList = workTriggerElements.map((workTriggerElement) => {
-  const thumbnailImageElement =
-    workTriggerElement.querySelector<HTMLImageElement>(".media-frame__image")!;
-  const imagePath = thumbnailImageElement.src;
-  return {
-    triggerElement: workTriggerElement,
-    thumbnailImageElement,
-    imagePath,
-  } satisfies WorkItem;
+const items: Item[] = workBtns.map((btn) => {
+  const thumb = btn.querySelector<HTMLImageElement>(".media-frame__image")!;
+  return { btn, thumb, src: thumb.src, alt: thumb.alt };
 });
 
-let currentWorkImageIndex = 0;
+let index = 0;
+
+const itemAt = (i: number): Item => items[loop(i, items.length)];
+const clearMotion = () => stage.classList.remove(C_NEXT, C_PREV, C_MOTION, C_SNAP);
+const reflow = () => stage.getBoundingClientRect();
 
 /**
- * 指定インデックスに対応する一覧画像要素を取得します。
+ * ライトボックスに指定画像を表示します。
  */
-const getWorkThumbnailImageElement = (imageIndex: number): HTMLImageElement => {
-  const selectedWorkImageIndex = toLoopedIndex(imageIndex, workItemList.length);
-  return workItemList[selectedWorkImageIndex].thumbnailImageElement;
+const show = (i: number) => {
+  const item = itemAt(i);
+  index = loop(i, items.length);
+  img.src = item.src;
+  img.alt = item.alt;
 };
 
 /**
- * ライトボックスに表示する画像を更新します。
+ * prev/next モーション終了後の表示状態を確定します。
  */
-const renderWorkImage = (targetIndex: number) => {
-  const nextWorkImageIndex = toLoopedIndex(targetIndex, workItemList.length);
-  const selectedWorkItem = workItemList[nextWorkImageIndex];
-  currentWorkImageIndex = nextWorkImageIndex;
-  workLightboxImageElement.src = selectedWorkItem.imagePath;
+const finishMotion = () => {
+  stage.classList.add(C_SNAP);
+  show(index);
+  ghost.src = "";
+  ghost.alt = "";
+  stage.classList.remove(C_NEXT, C_PREV, C_MOTION);
+  reflow();
+  stage.classList.remove(C_SNAP);
 };
 
 /**
- * ライトボックスを開き、指定インデックスの画像を表示します。
+ * prev/next モーションを開始します。
  */
-const openWorkLightbox = (targetIndex: number) => {
-  const selectedWorkThumbnailImageElement = getWorkThumbnailImageElement(targetIndex);
-  setViewTransitionName(selectedWorkThumbnailImageElement, workLightboxImageTransitionName);
-  runWorkViewTransition({
-    transitionClassName: workOpenTransitionClassName,
-    updateDom: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-      setViewTransitionName(workLightboxImageElement, workLightboxImageTransitionName);
-      renderWorkImage(targetIndex);
-      workLightboxElement.hidden = false;
+const startMotion = (offset: number) => {
+  const item = itemAt(index + offset);
+  index = loop(index + offset, items.length);
+  clearMotion();
+  ghost.src = item.src;
+  ghost.alt = item.alt;
+  stage.classList.add(C_SNAP, offset > 0 ? C_NEXT : C_PREV);
+  reflow();
+  stage.classList.remove(C_SNAP);
+  reflow();
+  stage.classList.add(C_MOTION);
+};
+
+/**
+ * ライトボックスを開きます。
+ */
+const open = (i: number) => {
+  const thumb = itemAt(i).thumb;
+  setVt(thumb, VT);
+  runVt({
+    cls: VT_OPEN,
+    update: () => {
+      setVt(thumb, "");
+      setVt(img, VT);
+      show(i);
+      clearMotion();
+      ghost.src = "";
+      ghost.alt = "";
+      lightbox.hidden = false;
       document.body.classList.add("is-work-lightbox-open");
     },
-    onFinished: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-    },
+    done: () => setVt(thumb, ""),
   });
 };
 
 /**
  * ライトボックスを閉じます。
  */
-const closeWorkLightbox = () => {
-  const selectedWorkThumbnailImageElement = getWorkThumbnailImageElement(currentWorkImageIndex);
-  runWorkViewTransition({
-    transitionClassName: workCloseTransitionClassName,
-    updateDom: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, workLightboxImageTransitionName);
-      setViewTransitionName(workLightboxImageElement, "");
-      workLightboxElement.hidden = true;
+const close = () => {
+  const thumb = itemAt(index).thumb;
+  runVt({
+    cls: VT_CLOSE,
+    update: () => {
+      setVt(thumb, VT);
+      setVt(img, "");
+      clearMotion();
+      ghost.src = "";
+      ghost.alt = "";
+      lightbox.hidden = true;
       document.body.classList.remove("is-work-lightbox-open");
     },
-    onFinished: () => {
-      setViewTransitionName(selectedWorkThumbnailImageElement, "");
-    },
+    done: () => setVt(thumb, ""),
   });
 };
 
-/**
- * ライトボックス内の画像を前後に移動します。
- */
-const moveWorkLightboxImage = (offset: number) => {
-  const transitionClassName =
-    offset > 0 ? workNextTransitionClassName : workPreviousTransitionClassName;
-  runWorkViewTransition({
-    transitionClassName,
-    updateDom: () => {
-      renderWorkImage(currentWorkImageIndex + offset);
-    },
-  });
-};
+img.addEventListener("transitionend", (event) => {
+  if (!stage.classList.contains(C_MOTION) || event.propertyName !== "transform") {
+    return;
+  }
+  finishMotion();
+});
 
-siteHeaderNavElement.addEventListener("click", (mouseEvent) => {
-  const clickedElement = mouseEvent.target as Element;
-  if (clickedElement.closest("a")) {
-    siteHeaderMenuToggleElement.checked = false;
+nav.addEventListener("click", (event) => {
+  if ((event.target as Element).closest("a")) {
+    nav.close();
   }
 });
 
-workItemList.forEach(({ triggerElement }, imageIndex) => {
-  triggerElement.addEventListener("click", () => {
-    openWorkLightbox(imageIndex);
-  });
+items.forEach(({ btn }, i) => {
+  btn.addEventListener("click", () => open(i));
 });
 
-workLightboxElement.addEventListener("click", (mouseEvent) => {
-  const clickedElement = mouseEvent.target as Element;
-  if (clickedElement.closest("[data-work-lightbox-close]")) {
-    closeWorkLightbox();
+lightbox.addEventListener("click", (event) => {
+  const el = event.target as Element;
+  if (el.closest("[data-work-lightbox-close]")) {
+    close();
     return;
   }
-  if (clickedElement.closest("[data-work-lightbox-previous]")) {
-    moveWorkLightboxImage(-1);
+  if (el.closest("[data-work-lightbox-previous]")) {
+    startMotion(-1);
     return;
   }
-  if (clickedElement.closest("[data-work-lightbox-next]")) {
-    moveWorkLightboxImage(1);
+  if (el.closest("[data-work-lightbox-next]")) {
+    startMotion(1);
   }
 });
 
-document.addEventListener("keydown", (keyboardEvent) => {
-  if (workLightboxElement.hidden) {
+document.addEventListener("keydown", (event) => {
+  if (lightbox.hidden) {
     return;
   }
-  switch (keyboardEvent.key) {
-    case "ArrowLeft":
-      moveWorkLightboxImage(-1);
-      break;
-    case "ArrowRight":
-      moveWorkLightboxImage(1);
-      break;
-    case "Escape":
-      closeWorkLightbox();
-      break;
-    default:
-      break;
+  if (event.key === "ArrowLeft") {
+    startMotion(-1);
+    return;
+  }
+  if (event.key === "ArrowRight") {
+    startMotion(1);
+    return;
+  }
+  if (event.key === "Escape") {
+    close();
   }
 });

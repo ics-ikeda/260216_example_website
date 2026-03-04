@@ -1,0 +1,228 @@
+.lightbox {
+  --slide: 160px;
+  --panel-w: min(100%, 1424px);
+  --panel-pad: 0 72px;
+  --stage-h: calc(100dvh - 72px);
+  --ctrl-size: 48px;
+  --close-line-w: 28px;
+  --arrow-w: 12px;
+  --arrow-h: 20px;
+  --hover-move: 3px;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  @media (width <= 768px) {
+    --panel-w: min(100%, 360px);
+    --panel-pad: 0 56px;
+    --stage-h: calc(100dvh - 64px);
+    --ctrl-size: 40px;
+    --close-line-w: 22px;
+    --arrow-w: 10px;
+    --arrow-h: 16px;
+    --hover-move: 2px;
+  }
+}
+
+@scope (.lightbox) {
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: rgb(0 0 0 / 80%);
+    border: none;
+  }
+
+  .panel {
+    position: relative;
+    z-index: 1;
+    width: var(--panel-w);
+    max-width: none;
+    padding: var(--panel-pad);
+    margin: 0;
+    background: transparent;
+    border: none;
+    isolation: isolate;
+  }
+
+  .ghost {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .stage {
+    position: relative;
+    height: var(--stage-h);
+
+    &.is-work-next .ghost {
+      visibility: visible;
+      transform: translate(-50%, -50%) translate(var(--slide), 0);
+    }
+
+    &.is-work-prev .ghost {
+      visibility: visible;
+      transform: translate(-50%, -50%) translate(calc(var(--slide) * -1), 0);
+    }
+
+    &.is-work-motion {
+      :is(.current, .ghost) {
+        visibility: visible;
+        mix-blend-mode: plus-lighter;
+      }
+
+      .current {
+        opacity: 0;
+      }
+
+      .ghost {
+        opacity: 1;
+        transform: translate(-50%, -50%) translate(0, 0);
+      }
+    }
+
+    &.is-work-snap {
+      :is(.current, .ghost) {
+        transition: none;
+      }
+    }
+
+    &.is-work-motion.is-work-next .current {
+      transform: translate(-50%, -50%) translate(calc(var(--slide) * -1), 0);
+    }
+
+    &.is-work-motion.is-work-prev .current {
+      transform: translate(-50%, -50%) translate(var(--slide), 0);
+    }
+  }
+
+  :is(.current, .ghost) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    visibility: visible;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    mix-blend-mode: normal;
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0);
+    transition: 0.3s allow-discrete;
+  }
+
+  :is(.close, .nav) {
+    z-index: 110;
+    width: var(--ctrl-size);
+    height: var(--ctrl-size);
+    padding: 0;
+    appearance: none;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+
+  .close {
+    position: fixed;
+    top: max(24px, env(safe-area-inset-top));
+    right: max(24px, env(safe-area-inset-right));
+    z-index: 120;
+
+    &::before,
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--close-line-w);
+      height: 2px;
+      content: "";
+      background: white;
+      transform-origin: center;
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    @media (width <= 768px) {
+      top: max(20px, env(safe-area-inset-top));
+      right: max(24px, env(safe-area-inset-right));
+    }
+  }
+
+  .nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    transition: 0.3s;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--arrow-w);
+      height: var(--arrow-h);
+      content: "";
+      background: white;
+      mask: url("/assets/icons/ui-button-icon.svg") center / contain no-repeat;
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+    }
+  }
+
+  .prev {
+    left: 0;
+
+    &::before {
+      rotate: 180deg;
+    }
+
+    &:hover {
+      translate: calc(var(--hover-move) * -1) -50%;
+    }
+  }
+
+  .next {
+    right: 0;
+
+    &:hover {
+      translate: var(--hover-move) -50%;
+    }
+  }
+}
+
+html {
+  &:has(body.is-work-lightbox-open) {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+}
+
+body {
+  &.is-work-lightbox-open {
+    padding-right: calc(100vw - 100%);
+    overflow: hidden;
+  }
+}
+
+:root {
+  &::view-transition-group(work-lightbox-image) {
+    overflow: clip;
+    animation-duration: 360ms;
+    animation-timing-function: ease;
+  }
+
+  &::view-transition-image-pair(work-lightbox-image) {
+    overflow: clip;
+  }
+}

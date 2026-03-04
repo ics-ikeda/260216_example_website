@@ -7,18 +7,18 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "oxlint .",
-    "lint:fix": "oxlint . --fix",
+    "lint": "oxlint . && stylelint \"src/**/*.css\"",
+    "lint:fix": "oxlint . --fix && stylelint \"src/**/*.css\" --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
   },
   "devDependencies": {
     "oxfmt": "^0.32.0",
     "oxlint": "^1.47.0",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.0-beta.13"
-  },
-  "overrides": {
-    "vite": "^8.0.0-beta.13"
+    "stylelint": "^17.4.0",
+    "stylelint-config-recess-order": "^7.6.1",
+    "stylelint-config-recommended": "^18.0.0",
+    "typescript": "^6.0.0-dev.20260303",
+    "vite": "^8.0.0-beta.16"
   }
 }

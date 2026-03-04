@@ -1,0 +1,24 @@
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding-block: 40px;
+  padding-inline: 40px;
+  line-height: 1.6;
+  text-align: center;
+
+  @media (width <= 768px) {
+    padding-inline: 24px;
+  }
+
+  p {
+    &:first-child {
+      font-size: 0.625rem;
+    }
+
+    &:last-child {
+      font-size: 0.75rem;
+    }
+  }
+}

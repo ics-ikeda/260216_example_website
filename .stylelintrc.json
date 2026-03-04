@@ -1,0 +1,11 @@
+{
+  "extends": ["stylelint-config-recommended", "stylelint-config-recess-order"],
+  "rules": {
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": ["sibling-index"]
+      }
+    ]
+  }
+}

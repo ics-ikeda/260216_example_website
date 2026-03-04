@@ -1,6 +1,4 @@
 :root {
-  --color-bg: white;
   --color-text: rgb(30 30 30);
   --color-text-muted: rgb(160 160 160);
-  --container-max: 1280px;
 }
