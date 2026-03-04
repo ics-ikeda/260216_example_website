@@ -10,4 +10,5 @@
 @import "./styles/sections/studio.css";
 @import "./styles/sections/contact.css";
 @import "./styles/chrome/footer.css";
-@import "./styles/chrome/header.css";
+@import "./styles/chrome/header-base.css";
+@import "./styles/chrome/header-menu.css";

@@ -9,6 +9,7 @@
 
 - 同一画像しか使わない `picture` は使わず、`img` を使う。
 - 役割のない装飾 `img`（線や記号など）は避け、原則CSSで表現する。
+- SVGファイル内に `style` 属性を直接書かない。
 - 未使用のアセット・クラスは削除する。
 
 ## CSS
@@ -26,7 +27,7 @@
 - 親状態セレクタ（例: `&:hover`）で完結できる子要素指定は、親ブロック内にネストする。
 - レンジメディアクエリは境界を統一する（例: `@media (width <= 768px)` と `@media (width > 768px)`）。
 - `@media (width <= 767px)` は使用せず、`@media (width < 768px)` を使う。
-- 範囲条件は `and` 連結より連鎖レンジを優先する（例: `@media (768px <= width <= 991px)`）。
+- 範囲条件は `and` 連結より連鎖レンジを優先する（例: `@media (768px <= width < 992px)`）。
 - `line-height` / `margin` / `padding` / `background` / `color` は、継承・既定値で足りる場合は指定しない。
 - CSS変数は必要最小限にする。定義1回・利用1回の変数はハードコードする。
 - CSS検証は `stylelint-config-recommended` + `stylelint-config-recess-order` を基本とし、ルールセット中心で運用する。
@@ -73,4 +74,11 @@
 ## 検証
 
 - 変更ごとに `npm run fmt`、`npm run lint`、`npm run build` を実行する。
+- レイアウト変更時は Playwright MCP で desktop / mobile の実画面を確認する。
+- Figma参照タスクでは、PlaywrightスクリーンショットとFigmaを比較してズレの有無を確認する。
 - 実行不能な検証がある場合は、理由を明記する。
+
+## 画像
+
+- 画像形式は原則AVIFを使用する。
+- 解像度は実表示サイズのRetina（2x）を上限にし、過大な元画像をそのまま置かない。

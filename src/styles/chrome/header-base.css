@@ -1,0 +1,57 @@
+@scope (.site-header) {
+  & {
+    position: fixed;
+    inset-block-start: 36px;
+    inset-inline: 40px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    transition: 0.3s;
+  }
+
+  .brand {
+    display: block;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: inherit;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+}
+
+body {
+  &.is-work-lightbox-open {
+    .site-header {
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+}
+
+@media (width > 768px) {
+  @scope (.site-header) {
+    & {
+      block-size: 30px;
+    }
+
+    .brand {
+      inline-size: max-content;
+      block-size: 30px;
+      line-height: 30px;
+    }
+  }
+}
+
+@media (width <= 768px) {
+  @scope (.site-header) {
+    & {
+      inset-block-start: 0;
+      inset-inline: 0;
+      padding: 24px 24px 0;
+    }
+  }
+}

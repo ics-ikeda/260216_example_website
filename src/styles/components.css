@@ -10,7 +10,7 @@
 }
 
 .section-header__label {
-  display: inline-flex;
+  display: inline flex;
   align-items: center;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .site-button {
-  display: inline-flex;
+  display: inline flex;
   gap: 4px;
   align-items: center;
   justify-content: center;

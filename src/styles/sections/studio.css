@@ -14,7 +14,7 @@
   align-items: start;
   justify-content: center;
 
-  @media (768px <= width <= 991px) {
+  @media (768px <= width < 992px) {
     grid-template-columns: 312px minmax(0, 326px);
     gap: 48px;
   }
@@ -33,7 +33,7 @@
   max-width: 480px;
   aspect-ratio: 16 / 9;
 
-  @media (768px <= width <= 991px) {
+  @media (768px <= width < 992px) {
     justify-self: start;
     max-width: 312px;
   }
@@ -55,7 +55,7 @@
   line-height: 1.6;
   list-style: none;
 
-  @media (768px <= width <= 991px) {
+  @media (768px <= width < 992px) {
     width: min(100%, 326px);
   }
 

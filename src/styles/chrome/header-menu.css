@@ -8,31 +8,11 @@
     --line-col: 30px;
     --line-gap: 24px;
     --line-size: 18px;
-    position: fixed;
-    inset-block-start: 36px;
-    inset-inline: 40px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    transition: 0.3s;
 
     &:has(.menu-dialog[open]) :is(.brand, .open) {
       pointer-events: none;
       opacity: 0;
     }
-  }
-
-  .brand {
-    display: block;
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    line-height: 1;
-    color: inherit;
-    white-space: nowrap;
-    text-decoration: none;
-    transition: 0.3s;
   }
 
   .menu {
@@ -118,8 +98,7 @@
     a {
       display: grid;
       grid-template-columns: var(--line-col) minmax(0, 1fr);
-      row-gap: 4px;
-      column-gap: var(--line-gap);
+      gap: 4px var(--line-gap);
       align-items: var(--nav-align);
       width: var(--link-width);
       max-width: var(--link-max);
@@ -128,6 +107,7 @@
       opacity: 0;
       translate: 0 12px;
       transition: 0.3s;
+
       &:visited {
         color: inherit;
       }
@@ -193,27 +173,6 @@ body {
       padding-right: calc(100vw - 100%);
     }
   }
-
-  &.is-work-lightbox-open {
-    .site-header {
-      pointer-events: none;
-      opacity: 0;
-    }
-  }
-}
-
-@media (width > 768px) {
-  @scope (.site-header) {
-    & {
-      block-size: 30px;
-    }
-
-    .brand {
-      inline-size: max-content;
-      block-size: 30px;
-      line-height: 30px;
-    }
-  }
 }
 
 @media (width <= 768px) {
@@ -227,9 +186,6 @@ body {
       --line-col: 16px;
       --line-gap: 20px;
       --line-size: 1px;
-      inset-block-start: 0;
-      inset-inline: 0;
-      padding: 24px 24px 0;
     }
 
     .close {
