@@ -219,7 +219,6 @@ body {
   &::view-transition-group(work-lightbox-image) {
     overflow: clip;
     animation-duration: 360ms;
-    animation-timing-function: ease;
   }
 
   &::view-transition-image-pair(work-lightbox-image) {

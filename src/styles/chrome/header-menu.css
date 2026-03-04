@@ -9,6 +9,17 @@
     --line-gap: 24px;
     --line-size: 18px;
 
+    @media (width <= 768px) {
+      --nav-pad-top: 106px;
+      --nav-pad-inline: 24px;
+      --nav-align: start;
+      --link-width: 100%;
+      --link-max: 312px;
+      --line-col: 16px;
+      --line-gap: 20px;
+      --line-size: 1px;
+    }
+
     &:has(.menu-dialog[open]) :is(.brand, .open) {
       pointer-events: none;
       opacity: 0;
@@ -56,6 +67,11 @@
     position: absolute;
     inset-block-start: 40px;
     inset-inline-end: 40px;
+
+    @media (width <= 768px) {
+      inset-block-start: 24px;
+      inset-inline-end: 24px;
+    }
 
     span {
       &:first-child {
@@ -120,6 +136,12 @@
         block-size: var(--line-size);
         content: "";
         border-top: 1px solid rgb(255 255 255 / 70%);
+
+        @media (width <= 768px) {
+          grid-row: 2;
+          background: rgb(255 255 255 / 70%);
+          border-top: 0;
+        }
       }
 
       &:hover {
@@ -131,6 +153,11 @@
       display: block;
       font-size: 0.75rem;
       line-height: 1;
+
+      @media (width <= 768px) {
+        grid-row: 1;
+        grid-column: 2;
+      }
     }
 
     .title {
@@ -140,6 +167,11 @@
       font-weight: bold;
       line-height: 1.2;
       white-space: nowrap;
+
+      @media (width <= 768px) {
+        grid-row: 2;
+        grid-column: 2;
+      }
     }
 
     &[open] {
@@ -171,44 +203,6 @@ body {
 
     @media (width > 768px) {
       padding-right: calc(100vw - 100%);
-    }
-  }
-}
-
-@media (width <= 768px) {
-  @scope (.site-header) {
-    & {
-      --nav-pad-top: 106px;
-      --nav-pad-inline: 24px;
-      --nav-align: start;
-      --link-width: 100%;
-      --link-max: 312px;
-      --line-col: 16px;
-      --line-gap: 20px;
-      --line-size: 1px;
-    }
-
-    .close {
-      inset-block-start: 24px;
-      inset-inline-end: 24px;
-    }
-
-    .menu-dialog {
-      a::before {
-        grid-row: 2;
-        background: rgb(255 255 255 / 70%);
-        border-top: 0;
-      }
-
-      .label {
-        grid-row: 1;
-        grid-column: 2;
-      }
-
-      .title {
-        grid-row: 2;
-        grid-column: 2;
-      }
     }
   }
 }
